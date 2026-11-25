@@ -1,0 +1,1348 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khảo sát dữ liệu cá nhân — Khoa Dược</title>
+<meta name="description" content="Phiếu khai báo hoạt động xử lý dữ liệu cá nhân tại Khoa Dược, Bệnh viện Truyền máu Huyết học.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none !important}
+/* Layout: một cột hẹp, thanh tiến độ dính trên cùng, mỗi bước là một nhóm câu hỏi phẳng có viền */
+:root{
+  --muc: #0f4c52;        /* xanh petrol - màu chủ đạo */
+  --muc-nhat: #e3f0f0;
+  --muc-dam: #0a3539;
+  --giay: #f7f5f1;       /* nền giấy ấm */
+  --mat: #ffffff;
+  --chu: #1c2321;
+  --chu-mo: #5d6866;
+  --vien: #d8d4cc;
+  --nhan: #b4690e;       /* hổ phách - cần chú ý */
+  --nhan-nen: #fdf3e2;
+  --canh: #a32c1e;       /* đỏ trầm - dữ liệu nhạy cảm */
+  --canh-nen: #fbeae7;
+  --ok: #2b6b4f;
+  --ok-nen: #e6f2eb;
+  color-scheme: light;
+  --f-tieu: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --f-chu: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --muc:#5fc3c9; --muc-nhat:#13302f; --muc-dam:#8ad8dc;
+    --giay:#13181a; --mat:#1b2225; --chu:#e8eceb; --chu-mo:#9aa8a6; --vien:#32403f;
+    --nhan:#e0a44a; --nhan-nen:#302616; --canh:#ef8b7c; --canh-nen:#331d1a;
+    --ok:#6fc49a; --ok-nen:#172b22; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --muc:#5fc3c9; --muc-nhat:#13302f; --muc-dam:#8ad8dc;
+  --giay:#13181a; --mat:#1b2225; --chu:#e8eceb; --chu-mo:#9aa8a6; --vien:#32403f;
+  --nhan:#e0a44a; --nhan-nen:#302616; --canh:#ef8b7c; --canh-nen:#331d1a;
+  --ok:#6fc49a; --ok-nen:#172b22; color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{background:var(--giay);color:var(--chu);font-family:var(--f-chu);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--mat)}
+h1,h2,h3{font-family:var(--f-tieu);text-wrap:balance;margin:0}
+h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.25rem;font-weight:600}
+h3{font-size:1rem;font-weight:600}
+p{margin:0}
+button{font-family:inherit;font-size:1rem;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:1rem}
+a{color:var(--muc)}
+
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--mat);border-bottom:1px solid var(--vien)}
+.rail-in{max-width:760px;margin:0 auto;padding-block:.6rem;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.rail-ten{font-family:var(--f-tieu);font-weight:600;font-size:.95rem;color:var(--muc);min-width:0}
+.rail-trangthai{margin-left:auto;font-size:.8rem;color:var(--chu-mo);font-variant-numeric:tabular-nums}
+.thanh{height:4px;background:var(--vien);border-radius:2px;overflow:hidden;flex:1 1 120px;min-width:80px}
+.thanh i{display:block;height:100%;background:var(--muc);transition:width .3s ease}
+
+.khung{max-width:760px;margin:0 auto;padding-block:1.5rem 4rem;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.nhom{background:var(--mat);border:1px solid var(--vien);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.nhom > header{margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--vien)}
+.nhom > header p{color:var(--chu-mo);font-size:.9rem;margin-top:.25rem}
+
+.cau{margin-bottom:1.5rem}
+.cau:last-child{margin-bottom:0}
+.cau > label, .cau-tieu{display:block;font-family:var(--f-tieu);font-weight:600;font-size:1rem;margin-bottom:.15rem}
+.vidu{font-size:.85rem;color:var(--chu-mo);margin-bottom:.5rem}
+.vidu b{font-weight:600;color:var(--chu)}
+
+.o{width:100%;padding:.6rem .7rem;border:1px solid var(--vien);border-radius:7px;background:var(--giay);color:var(--chu)}
+.o:focus-visible{outline:2px solid var(--muc);outline-offset:1px}
+textarea.o{min-height:4.5rem;resize:vertical;line-height:1.5}
+.hang{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.hang > .o{flex:1 1 10rem;min-width:0}
+.so{width:7rem;text-align:right;font-variant-numeric:tabular-nums}
+
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .7rem;border:1px solid var(--vien);
+  border-radius:999px;background:var(--mat);color:var(--chu);font-size:.88rem;line-height:1.35;text-align:left}
+.chip:hover{border-color:var(--muc)}
+.chip[aria-pressed="true"]{background:var(--muc-nhat);border-color:var(--muc);color:var(--muc-dam);font-weight:500}
+.chip .dau{font-weight:700;opacity:.55}
+.chip[aria-pressed="true"] .dau{opacity:1}
+.chip.ns[aria-pressed="true"]{background:var(--canh-nen);border-color:var(--canh);color:var(--canh)}
+
+.radio{display:flex;flex-wrap:wrap;gap:.4rem}
+.radio button{padding:.4rem .9rem;border:1px solid var(--vien);border-radius:7px;background:var(--mat);color:var(--chu);font-size:.9rem}
+.radio button[aria-pressed="true"]{background:var(--muc);border-color:var(--muc);color:#fff;font-weight:500}
+
+.khongro{background:none;border:none;color:var(--muc);font-size:.82rem;text-decoration:underline;
+  text-underline-offset:3px;padding:.2rem 0;margin-top:.35rem}
+
+.bao{border-left:3px solid var(--nhan);background:var(--nhan-nen);color:var(--chu);
+  padding:.6rem .8rem;border-radius:0 7px 7px 0;font-size:.88rem;margin-top:.6rem}
+.bao.do{border-left-color:var(--canh);background:var(--canh-nen)}
+.bao.xanh{border-left-color:var(--ok);background:var(--ok-nen)}
+.bao b{font-weight:600}
+
+.the{display:grid;gap:.6rem}
+.the button{display:block;width:100%;text-align:left;padding:.85rem 1rem;border:1px solid var(--vien);
+  border-radius:9px;background:var(--mat);color:var(--chu)}
+.the button:hover{border-color:var(--muc)}
+.the button[aria-pressed="true"]{border-color:var(--muc);background:var(--muc-nhat);box-shadow:inset 3px 0 0 var(--muc)}
+.the .t{font-family:var(--f-tieu);font-weight:600;display:block}
+.the .m{display:block;font-size:.86rem;color:var(--chu-mo);margin-top:.15rem}
+.the button[aria-pressed="true"] .m{color:var(--muc-dam)}
+
+.dieu{margin-top:.5rem;font-size:.85rem}
+.dieu summary{cursor:pointer;color:var(--muc);list-style:none;display:inline-flex;align-items:center;gap:.3rem}
+.dieu summary::-webkit-details-marker{display:none}
+.dieu summary::before{content:"?";display:inline-grid;place-items:center;width:1.1rem;height:1.1rem;
+  border:1px solid currentColor;border-radius:50%;font-size:.72rem;font-weight:700}
+.dieu p{margin-top:.5rem;color:var(--chu-mo);padding-left:1.4rem;border-left:1px solid var(--vien)}
+
+.dieuhuong{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem}
+.nut{padding:.7rem 1.4rem;border-radius:8px;border:1px solid var(--muc);background:var(--muc);color:#fff;font-weight:600}
+.nut:hover{background:var(--muc-dam);border-color:var(--muc-dam)}
+.nut.phu{background:transparent;color:var(--muc)}
+.nut.phu:hover{background:var(--muc-nhat)}
+.nut:disabled{opacity:.45;cursor:not-allowed}
+.nut.lon{font-size:1.05rem;padding:.85rem 1.8rem}
+
+.tomtat{border:1px solid var(--vien);border-radius:9px;overflow:hidden;margin-bottom:.75rem;background:var(--mat)}
+.tomtat > h3{padding:.7rem 1rem;background:var(--muc-nhat);color:var(--muc-dam);font-size:.95rem}
+.tomtat dl{margin:0;padding:.5rem 1rem 1rem;display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr);gap:.1rem .9rem}
+.tomtat dt{font-size:.84rem;color:var(--chu-mo);padding-top:.45rem}
+.tomtat dd{margin:0;padding-top:.45rem;font-size:.92rem;min-width:0;overflow-wrap:anywhere}
+@media (max-width:560px){ .tomtat dl{grid-template-columns:1fr;gap:0} .tomtat dt{padding-top:.6rem} .tomtat dd{padding-top:.1rem} }
+
+.chep{width:100%;min-height:11rem;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:.8rem;
+  border:1px solid var(--vien);border-radius:7px;padding:.7rem;background:var(--giay);color:var(--chu);white-space:pre;overflow:auto}
+
+.bang{width:100%;border-collapse:collapse;font-size:.88rem}
+.bang th,.bang td{border:1px solid var(--vien);padding:.45rem .6rem;text-align:left;vertical-align:top}
+.bang th{background:var(--muc-nhat);color:var(--muc-dam);font-family:var(--f-tieu);font-weight:600}
+.cuon{overflow-x:auto}
+
+.chan{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--vien);font-size:.82rem;color:var(--chu-mo)}
+.chan a{color:var(--muc)}
+.lienket{background:none;border:none;color:var(--chu-mo);font-size:.82rem;text-decoration:underline;text-underline-offset:3px;padding:0}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important} }
+</style>
+</head>
+<body>
+
+<div class="rail">
+  <div class="rail-in">
+    <span class="rail-ten">Khảo sát dữ liệu cá nhân &middot; Khoa Dược</span>
+    <span class="thanh"><i id="thanh" style="width:0%"></i></span>
+    <span class="rail-trangthai" id="trangthai">Chưa bắt đầu</span>
+  </div>
+</div>
+
+<main class="khung" id="man"></main>
+
+<script>
+/* ===================== CÀI ĐẶT ===================== */
+
+/* Dán đường dẫn /exec của Google Apps Script vào giữa hai dấu nháy.
+   Để trống thì trang vẫn điền được bình thường, chỉ là không nộp thẳng
+   vào Drive — người điền dùng nút chép rồi gửi email. */
+var DIA_CHI_NOP = "";
+
+/* ===================== DỮ LIỆU NỀN ===================== */
+
+var NHAY_CAM = {
+  a:"Nguồn gốc chủng tộc, dân tộc",
+  b:"Quan điểm chính trị, tôn giáo, tín ngưỡng",
+  c:"Đời sống riêng tư, bí mật cá nhân, bí mật gia đình",
+  d:"Tình trạng sức khỏe",
+  "đ":"Sinh trắc học, đặc điểm di truyền",
+  e:"Đời sống tình dục, xu hướng tình dục",
+  g:"Tội phạm, vi phạm pháp luật",
+  h:"Vị trí xác định qua dịch vụ định vị",
+  i:"Tài khoản định danh điện tử, ảnh thẻ căn cước",
+  k:"Thông tin thẻ, giao dịch ngân hàng",
+  l:"Theo dõi hành vi trên không gian mạng",
+  m:"Dữ liệu khác pháp luật yêu cầu giữ bí mật"
+};
+
+/* Mỗi ô tick là một loại thông tin; ô nào thuộc nhóm nhạy cảm thì mang sẵn điểm a..m
+   để người điền không phải tra bảng. */
+var TRUONG = [
+  {t:"Họ tên"},
+  {t:"Năm sinh hoặc ngày sinh"},
+  {t:"Giới tính"},
+  {t:"Địa chỉ"},
+  {t:"Số điện thoại"},
+  {t:"Mã người bệnh"},
+  {t:"Số thẻ bảo hiểm y tế"},
+  {t:"Số căn cước, số định danh cá nhân"},
+  {t:"Ảnh chụp hoặc bản photo thẻ căn cước", ns:"i"},
+  {t:"Chẩn đoán bệnh", ns:"d"},
+  {t:"Đơn thuốc, y lệnh, liều dùng", ns:"d"},
+  {t:"Kết quả xét nghiệm", ns:"d"},
+  {t:"Cân nặng, chiều cao dùng để tính liều", ns:"d"},
+  {t:"Tiền sử dị ứng, phản ứng có hại của thuốc", ns:"d"},
+  {t:"Giấy khám sức khỏe, giấy nghỉ ốm", ns:"d"},
+  {t:"Kết quả xét nghiệm gen, di truyền", ns:"đ"},
+  {t:"Vân tay hoặc khuôn mặt dùng chấm công", ns:"đ"},
+  {t:"Dân tộc", ns:"a"},
+  {t:"Tôn giáo", ns:"b"},
+  {t:"Hoàn cảnh gia đình, kinh tế", ns:"c"},
+  {t:"Tiền sử hành vi nguy cơ", ns:"e"},
+  {t:"Người bệnh là bị can, phạm nhân", ns:"g"},
+  {t:"Số thẻ, giao dịch ngân hàng, thu viện phí", ns:"k"},
+  {t:"Họ tên, chức danh, chữ ký của nhân viên"},
+  {t:"Bằng cấp, chứng chỉ hành nghề"},
+  {t:"Lịch trực, bảng chấm công"}
+];
+
+var NOI_LUU = ["Phần mềm HIS của Bệnh viện","Phần mềm kho dược hoặc nhà thuốc","File Excel, Word trên máy tính",
+  "Thư mục dùng chung trên mạng nội bộ","Sổ ghi tay","Tủ, kệ hồ sơ giấy","Nhóm trò chuyện trên ứng dụng nhắn tin",
+  "Hộp thư điện tử","USB, ổ cứng rời","Điện thoại cá nhân","Thiết bị y tế có lưu dữ liệu"];
+
+var AI_XEM = ["Dược sĩ của khoa","Kỹ thuật viên, nhân viên kho","Thủ kho","Nhân viên thống kê",
+  "Nhân viên đấu thầu, mua sắm","Trưởng khoa, phó khoa","Nhân viên hành chính khoa","Học viên thực hành"];
+
+var TRONG_BV = ["Các khoa lâm sàng","Phòng Tài chính kế toán","Phòng Kế hoạch tổng hợp","Phòng Tổ chức cán bộ",
+  "Phòng Vật tư – Thiết bị y tế","Ban Giám đốc","Hội đồng Thuốc và Điều trị","Phòng Công nghệ thông tin"];
+
+var NGUON = ["Người bệnh, người nhà tự khai trên giấy","Nhận từ khoa khác qua phần mềm HIS",
+  "Nhận phiếu giấy có chữ ký từ khoa khác","Nhân viên khoa nhập tay vào phần mềm",
+  "Nhận qua thư điện tử","Nhận từ tổ chức bên ngoài Bệnh viện","Kết xuất từ phần mềm ra file"];
+
+var BAO_VE = ["Tài khoản riêng, có phân quyền","Máy tính có đặt mật khẩu","File có đặt mật khẩu",
+  "Tủ, kho có khóa","Khu vực hạn chế người ra vào","Sổ có đánh số trang, có ký nhận","Chưa có biện pháp gì"];
+
+var CHU_DL = ["Người bệnh nội trú","Người bệnh ngoại trú","Người nhà người bệnh","Người hiến máu",
+  "Nhân viên của khoa","Học viên thực hành","Nhân sự của nhà thầu, nhà cung cấp"];
+
+var BO_PHAN = ["Kho cấp phát nội trú","Nhà thuốc, cấp phát ngoại trú","Dược lâm sàng","Kho thuốc kiểm soát đặc biệt",
+  "Pha chế","Thống kê – báo cáo","Đấu thầu – mua sắm","Kho – giao nhận","Hành chính khoa","Khác"];
+
+/* 10 việc đã dựng sẵn theo nội dung trọng tâm của Khoa Dược tại Phụ lục 1 */
+var VIEC = [
+  {id:"v1", ten:"Duyệt phiếu lĩnh và cấp phát thuốc cho người bệnh nội trú",
+   mo:"Nhận phiếu lĩnh của khoa lâm sàng, kiểm tra y lệnh rồi phát thuốc lên khoa.",
+   mucDich:"Kiểm tra tính hợp lý của y lệnh; cấp phát đúng người bệnh, đúng thuốc, đúng liều; theo dõi tồn kho."},
+  {id:"v2", ten:"Cấp phát thuốc ngoại trú, bán thuốc tại nhà thuốc Bệnh viện",
+   mo:"Phát thuốc theo đơn cho người bệnh về nhà, hoặc bán thuốc tại nhà thuốc.",
+   mucDich:"Cấp phát, bán thuốc theo đơn; hướng dẫn sử dụng thuốc; phục vụ thanh toán bảo hiểm y tế."},
+  {id:"v3", ten:"Quản lý thuốc phải kiểm soát đặc biệt",
+   mo:"Thuốc gây nghiện, hướng thần, tiền chất — có sổ theo dõi riêng, ghi tên người bệnh và người ký.",
+   mucDich:"Kiểm soát chặt việc kê đơn, cấp phát, sử dụng, hoàn trả và hủy thuốc theo quy định."},
+  {id:"v4", ten:"Theo dõi và báo cáo phản ứng có hại của thuốc (ADR)",
+   mo:"Ghi nhận ca gặp phản ứng thuốc và gửi báo cáo ra ngoài Bệnh viện.",
+   mucDich:"Bảo đảm an toàn trong sử dụng thuốc; thực hiện nghĩa vụ báo cáo ADR theo quy định."},
+  {id:"v5", ten:"Dược lâm sàng: bình đơn, giám sát kháng sinh, tư vấn dùng thuốc",
+   mo:"Xem hồ sơ người bệnh trên HIS, trao đổi với bác sĩ, ghi chép can thiệp.",
+   mucDich:"Bảo đảm sử dụng thuốc hợp lý, an toàn, hiệu quả; tham gia quản lý kháng sinh."},
+  {id:"v6", ten:"Pha chế, chuẩn bị thuốc theo liều cá thể hóa",
+   mo:"Pha thuốc theo cân nặng, diện tích da của từng người bệnh; nhãn thuốc có tên người bệnh.",
+   mucDich:"Chuẩn bị thuốc đúng liều theo chỉ định; bảo đảm an toàn cho người bệnh và nhân viên."},
+  {id:"v7", ten:"Tổng hợp, thống kê, báo cáo sử dụng thuốc",
+   mo:"Kết xuất số liệu từ HIS ra file, làm báo cáo gửi trong và ngoài Bệnh viện.",
+   mucDich:"Phục vụ quản lý sử dụng thuốc, thanh toán bảo hiểm y tế và báo cáo cơ quan quản lý."},
+  {id:"v8", ten:"Đấu thầu, mua sắm thuốc và vật tư y tế",
+   mo:"Hồ sơ nhà thầu có tên, chứng chỉ, chữ ký của nhân sự công ty.",
+   mucDich:"Thực hiện mua sắm theo quy định pháp luật về đấu thầu; ký và quản lý hợp đồng."},
+  {id:"v9", ten:"Quản lý kho: nhập, xuất, giao nhận thuốc và vật tư",
+   mo:"Biên bản giao nhận, phiếu nhập xuất có tên và chữ ký người giao, người nhận.",
+   mucDich:"Theo dõi hàng hóa nhập – xuất – tồn; xác định trách nhiệm các bên trong giao nhận."},
+  {id:"v10", ten:"Quản lý nhân sự, lịch trực, chấm công, học viên của khoa",
+   mo:"Danh sách nhân viên, bảng trực, chấm công, hồ sơ học viên đến thực hành.",
+   mucDich:"Phân công công việc, theo dõi ngày công và chế độ trực; quản lý học viên thực hành."}
+];
+
+/* ===================== TRẠNG THÁI ===================== */
+
+var KHOA_LUU = "dpia-khoaduoc-v1";
+var S = {
+  nguoi:{hoTen:"",chucDanh:"",boPhan:""},
+  chon:[],
+  khac:[],
+  phieu:{},
+  buoc:0,
+  maPhieu:""
+};
+var daNop = false;
+var KHOA_MA = "dpia-khoaduoc-ma";
+
+function taoMa(){
+  return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+function luu(){
+  try{ localStorage.setItem(KHOA_LUU, JSON.stringify(S)); baoLuu(); }catch(e){}
+}
+function doc(){
+  try{
+    var r = localStorage.getItem(KHOA_LUU);
+    if(r){ var o = JSON.parse(r); if(o && o.nguoi){ S = o; } }
+  }catch(e){}
+  if(!S.maPhieu) S.maPhieu = taoMa();
+}
+var hienLuu = null;
+function baoLuu(){
+  var el = document.getElementById("trangthai");
+  if(!el) return;
+  var g = new Date();
+  var hm = String(g.getHours()).padStart(2,"0") + ":" + String(g.getMinutes()).padStart(2,"0");
+  el.textContent = "Đã lưu nháp " + hm;
+  clearTimeout(hienLuu);
+  hienLuu = setTimeout(veTrangThai, 4000);
+}
+function veTrangThai(){
+  var el = document.getElementById("trangthai");
+  if(!el) return;
+  var b = cacBuoc();
+  el.textContent = S.buoc === 0 ? "Chưa bắt đầu" : ("Bước " + (S.buoc+1) + "/" + b.length);
+}
+
+/* ===================== PHIẾU ===================== */
+
+function phieuMoi(viec){
+  return {
+    ten: viec ? viec.ten : "",
+    mucDich: viec ? viec.mucDich : "",
+    chuDL: [], soNam:"", soLuu:"",
+    treEm:"",
+    truong: [],
+    nguon: [],
+    dongY:"", bieuMau:"",
+    noiLuu: [],
+    aiXem: [], soNguoi:"",
+    trongBV: [], ngoaiBV:"", nuocNgoai:"",
+    luuLau:"", luuGhi:"",
+    baoVe: [],
+    ghiChu:""
+  };
+}
+function layPhieu(id){
+  if(!S.phieu[id]){
+    var v = null;
+    for(var i=0;i<VIEC.length;i++){ if(VIEC[i].id===id) v = VIEC[i]; }
+    if(!v){ for(var j=0;j<S.khac.length;j++){ if(S.khac[j].id===id) v = S.khac[j]; } }
+    S.phieu[id] = phieuMoi(v);
+  }
+  return S.phieu[id];
+}
+function diemNhayCam(p){
+  var ra = [], co = {};
+  for(var i=0;i<p.truong.length;i++){
+    for(var j=0;j<TRUONG.length;j++){
+      if(TRUONG[j].t === p.truong[i] && TRUONG[j].ns && !co[TRUONG[j].ns]){
+        co[TRUONG[j].ns] = 1; ra.push(TRUONG[j].ns);
+      }
+    }
+  }
+  ra.sort();
+  return ra;
+}
+
+/* ===================== ĐIỀU HƯỚNG ===================== */
+
+function cacBuoc(){
+  var b = [{k:"mo"},{k:"nguoi"},{k:"chon"}];
+  for(var i=0;i<S.chon.length;i++) b.push({k:"phieu", id:S.chon[i]});
+  b.push({k:"xong"});
+  return b;
+}
+function di(n){
+  var b = cacBuoc();
+  S.buoc = Math.max(0, Math.min(n, b.length-1));
+  luu(); ve();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ===================== DỰNG GIAO DIỆN ===================== */
+
+function el(tag, cls, txt){
+  var e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(txt != null) e.textContent = txt;
+  return e;
+}
+function nhomMoi(tieu, phu){
+  var n = el("section","nhom");
+  if(tieu){
+    var h = el("header");
+    h.appendChild(el("h2", null, tieu));
+    if(phu) h.appendChild(el("p", null, phu));
+    n.appendChild(h);
+  }
+  return n;
+}
+function cauMoi(tieu, vidu){
+  var c = el("div","cau");
+  c.appendChild(el("div","cau-tieu",tieu));
+  if(vidu){
+    var v = el("div","vidu");
+    v.innerHTML = vidu;
+    c.appendChild(v);
+  }
+  return c;
+}
+function giaiThich(noiDung){
+  var d = el("details","dieu");
+  d.appendChild(el("summary", null, "Vì sao hỏi câu này"));
+  d.appendChild(el("p", null, noiDung));
+  return d;
+}
+function oChips(ds, daChon, doi, lopNS){
+  var w = el("div","chips");
+  ds.forEach(function(m){
+    var nhan = (typeof m === "string") ? m : m.t;
+    var ns   = (typeof m === "string") ? null : m.ns;
+    var b = el("button", "chip" + (ns && lopNS ? " ns" : ""));
+    var d = el("span","dau", daChon.indexOf(nhan) >= 0 ? "✓" : "+");
+    b.appendChild(d);
+    b.appendChild(document.createTextNode(nhan));
+    b.type = "button";
+    b.setAttribute("aria-pressed", daChon.indexOf(nhan) >= 0 ? "true" : "false");
+    b.onclick = function(){
+      var k = daChon.indexOf(nhan);
+      if(k >= 0) daChon.splice(k,1); else daChon.push(nhan);
+      b.setAttribute("aria-pressed", k >= 0 ? "false" : "true");
+      d.textContent = k >= 0 ? "+" : "✓";
+      luu();
+      if(doi) doi();
+    };
+    w.appendChild(b);
+  });
+  return w;
+}
+function oRadio(ds, giaTri, dat){
+  var w = el("div","radio");
+  ds.forEach(function(m){
+    var b = el("button", null, m);
+    b.type = "button";
+    b.setAttribute("aria-pressed", giaTri() === m ? "true" : "false");
+    b.onclick = function(){
+      dat(m); luu();
+      Array.prototype.forEach.call(w.children, function(x){
+        x.setAttribute("aria-pressed", x.textContent === m ? "true" : "false");
+      });
+    };
+    w.appendChild(b);
+  });
+  return w;
+}
+function oChu(giaTri, dat, chuGoi, nhieuDong){
+  var e = el(nhieuDong ? "textarea" : "input","o");
+  if(!nhieuDong) e.type = "text";
+  e.value = giaTri() || "";
+  if(chuGoi) e.placeholder = chuGoi;
+  var hen = null;
+  e.oninput = function(){
+    dat(e.value);
+    clearTimeout(hen);
+    hen = setTimeout(function(){ luu(); kiemTraThat(e); }, 500);
+  };
+  return e;
+}
+function nutKhongRo(dat, lam){
+  var b = el("button","khongro","Tôi không rõ mục này");
+  b.type = "button";
+  b.onclick = function(){ dat("Không rõ"); luu(); if(lam) lam(); };
+  return b;
+}
+
+/* Nhắc khi người điền lỡ gõ dữ liệu thật */
+function kiemTraThat(o){
+  var v = o.value || "";
+  var co = /\b\d{9,12}\b/.test(v) || /\b0\d{9}\b/.test(v);
+  var cu = o.parentNode && o.parentNode.querySelector(".bao.do.nhac");
+  if(co && !cu){
+    var b = el("div","bao do nhac");
+    b.innerHTML = "<b>Khoan đã.</b> Có vẻ bạn vừa gõ một dãy số giống số điện thoại hoặc số căn cước. " +
+      "Phiếu này chỉ ghi <b>loại</b> thông tin, ví dụ &ldquo;số điện thoại người bệnh&rdquo;, " +
+      "tuyệt đối không ghi dữ liệu thật của bất kỳ ai.";
+    o.parentNode.appendChild(b);
+  } else if(!co && cu){
+    cu.remove();
+  }
+}
+
+/* ===================== CÁC MÀN HÌNH ===================== */
+
+function manMo(m){
+  var n = nhomMoi("Khoa Dược cần liệt kê những việc có đụng tới thông tin về con người");
+  var p1 = el("p", null, "Bệnh viện đang lập hồ sơ đánh giá tác động xử lý dữ liệu cá nhân theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15. Phòng Công nghệ thông tin cần biết khoa mình đang thu thập, lưu và chia sẻ những thông tin gì về người bệnh, người hiến, nhân viên.");
+  var p2 = el("p", null, "Bạn chỉ cần trả lời về phần việc mình phụ trách. Phần lớn câu hỏi là chọn sẵn, bấm vài cái là xong. Khoảng 10 – 15 phút cho mỗi việc.");
+  p2.style.marginTop = ".75rem";
+  n.appendChild(p1); n.appendChild(p2);
+
+  var b1 = el("div","bao do");
+  b1.innerHTML = "<b>Nguyên tắc quan trọng nhất:</b> chỉ mô tả <b>loại</b> thông tin, ví dụ &ldquo;họ tên, số điện thoại người bệnh&rdquo;. " +
+    "Không ghi tên thật, số điện thoại thật, kết quả xét nghiệm hay hình ảnh của bất kỳ ai.";
+  b1.style.marginTop = "1rem";
+  n.appendChild(b1);
+
+  var b2 = el("div","bao");
+  b2.innerHTML = "<b>Cứ khai đúng thực tế,</b> kể cả cách làm chưa đúng quy định — file chưa đặt mật khẩu, tủ chưa có khóa, nhóm chat trao đổi đơn thuốc. " +
+    "Mục đích là để Bệnh viện biết mà khắc phục, không phải để bắt lỗi ai. Khai cho &ldquo;đẹp&rdquo; thì hồ sơ sai.";
+  n.appendChild(b2);
+
+  var b3 = el("div","bao xanh");
+  b3.innerHTML = "<b>Không biết thì cứ ghi &ldquo;Không rõ&rdquo;.</b> Mỗi câu đều có sẵn nút đó. Đơn vị tư vấn sẽ hỏi lại trong buổi phỏng vấn.";
+  n.appendChild(b3);
+
+  var dh = el("div","dieuhuong");
+  var nut = el("button","nut lon","Bắt đầu điền");
+  nut.type = "button";
+  nut.onclick = function(){ di(1); };
+  dh.appendChild(nut);
+  n.appendChild(dh);
+  m.appendChild(n);
+
+  var n2 = nhomMoi(null);
+  n2.style.background = "transparent";
+  n2.style.border = "none";
+  n2.style.padding = "0";
+  var lk = el("button","lienket","Tôi là người tổng hợp của khoa — mở trang gộp phiếu");
+  lk.type = "button";
+  lk.onclick = function(){ location.hash = "tong-hop"; };
+  n2.appendChild(lk);
+  m.appendChild(n2);
+}
+
+function manNguoi(m){
+  var n = nhomMoi("Bạn là ai", "Để người tổng hợp biết phiếu này của ai, và hỏi lại khi cần.");
+
+  var c1 = cauMoi("Họ và tên");
+  c1.appendChild(oChu(function(){return S.nguoi.hoTen}, function(v){S.nguoi.hoTen=v}, "Ví dụ: Nguyễn Văn A"));
+  n.appendChild(c1);
+
+  var c2 = cauMoi("Chức danh");
+  c2.appendChild(oChu(function(){return S.nguoi.chucDanh}, function(v){S.nguoi.chucDanh=v}, "Ví dụ: Dược sĩ, kỹ thuật viên, thủ kho"));
+  n.appendChild(c2);
+
+  var c3 = cauMoi("Bạn làm ở bộ phận nào của khoa", "Chọn một ô gần đúng nhất.");
+  c3.appendChild(oRadio(BO_PHAN, function(){return S.nguoi.boPhan}, function(v){S.nguoi.boPhan=v}));
+  n.appendChild(c3);
+
+  m.appendChild(n);
+  m.appendChild(dieuHuong(0, 2, function(){ return !!S.nguoi.hoTen.trim(); }, "Nhập họ tên trước đã"));
+}
+
+function manChon(m){
+  var n = nhomMoi("Bạn phụ trách những việc nào",
+    "Chọn mọi việc bạn có tham gia, kể cả làm phụ. Mỗi việc đã chọn sẽ có một trang câu hỏi riêng ở bước sau.");
+
+  var w = el("div","the");
+  VIEC.forEach(function(v){
+    var b = el("button");
+    b.type = "button";
+    var t = el("span","t", v.ten);
+    var mo = el("span","m", v.mo);
+    b.appendChild(t); b.appendChild(mo);
+    b.setAttribute("aria-pressed", S.chon.indexOf(v.id) >= 0 ? "true" : "false");
+    b.onclick = function(){
+      var k = S.chon.indexOf(v.id);
+      if(k >= 0) S.chon.splice(k,1); else S.chon.push(v.id);
+      b.setAttribute("aria-pressed", k >= 0 ? "false" : "true");
+      luu(); capNhatThanh();
+      var d = document.getElementById("demViec");
+      if(d) d.textContent = demChu();
+    };
+    w.appendChild(b);
+  });
+  n.appendChild(w);
+
+  var ck = el("div","cau");
+  ck.style.marginTop = "1.25rem";
+  ck.appendChild(el("div","cau-tieu","Còn việc nào khác không có trong danh sách?"));
+  var vd = el("div","vidu");
+  vd.innerHTML = "Ví dụ: <b>giữ sổ khách đến làm việc tại khoa</b>, <b>quản lý đề tài nghiên cứu có dùng dữ liệu người bệnh</b>.";
+  ck.appendChild(vd);
+  var hang = el("div","hang");
+  var o = el("input","o"); o.type = "text"; o.placeholder = "Tên việc, ví dụ: Theo dõi hạn dùng thuốc tủ trực";
+  var them = el("button","nut phu","Thêm việc");
+  them.type = "button";
+  them.onclick = function(){
+    var t = o.value.trim();
+    if(!t) return;
+    var id = "k" + (S.khac.length+1) + Date.now().toString(36).slice(-3);
+    S.khac.push({id:id, ten:t, mo:"Việc do đơn vị tự bổ sung", mucDich:""});
+    S.chon.push(id);
+    o.value = "";
+    luu(); ve();
+  };
+  hang.appendChild(o); hang.appendChild(them);
+  ck.appendChild(hang);
+
+  if(S.khac.length){
+    var ds = el("div","chips");
+    ds.style.marginTop = ".6rem";
+    S.khac.forEach(function(k){
+      var b = el("button","chip");
+      b.type = "button";
+      b.setAttribute("aria-pressed", S.chon.indexOf(k.id) >= 0 ? "true" : "false");
+      b.appendChild(el("span","dau", S.chon.indexOf(k.id) >= 0 ? "✓" : "+"));
+      b.appendChild(document.createTextNode(k.ten));
+      b.onclick = function(){
+        var q = S.chon.indexOf(k.id);
+        if(q >= 0) S.chon.splice(q,1); else S.chon.push(k.id);
+        luu(); ve();
+      };
+      ds.appendChild(b);
+    });
+    ck.appendChild(ds);
+  }
+  n.appendChild(ck);
+  m.appendChild(n);
+
+  var dem = el("p", null, demChu());
+  dem.id = "demViec";
+  dem.style.color = "var(--chu-mo)";
+  dem.style.fontSize = ".9rem";
+  m.appendChild(dem);
+
+  m.appendChild(dieuHuong(1, 3, function(){ return S.chon.length > 0; }, "Chọn ít nhất một việc"));
+}
+function demChu(){
+  if(!S.chon.length) return "Chưa chọn việc nào.";
+  return "Đã chọn " + S.chon.length + " việc — bạn sẽ điền " + S.chon.length + " trang câu hỏi.";
+}
+
+function manPhieu(m, id, thuTu){
+  var p = layPhieu(id);
+  var viec = null;
+  for(var i=0;i<VIEC.length;i++) if(VIEC[i].id===id) viec = VIEC[i];
+  if(!viec) for(var j=0;j<S.khac.length;j++) if(S.khac[j].id===id) viec = S.khac[j];
+  var tenViec = viec ? viec.ten : p.ten;
+
+  var dau = el("p", null, "Việc " + thuTu + " trong " + S.chon.length);
+  dau.style.color = "var(--muc)";
+  dau.style.fontWeight = "600";
+  dau.style.fontSize = ".85rem";
+  dau.style.letterSpacing = ".04em";
+  dau.style.textTransform = "uppercase";
+  m.appendChild(dau);
+  var h = el("h1", null, tenViec);
+  h.style.marginBottom = "1.25rem";
+  m.appendChild(h);
+
+  /* --- A --- */
+  var A = nhomMoi("Việc này làm để làm gì", "Đã điền sẵn, bạn sửa lại cho đúng với khoa mình nếu cần.");
+  var a1 = cauMoi("Tên việc");
+  a1.appendChild(oChu(function(){return p.ten || tenViec}, function(v){p.ten=v}));
+  A.appendChild(a1);
+  var a2 = cauMoi("Mục đích");
+  a2.appendChild(oChu(function(){return p.mucDich}, function(v){p.mucDich=v}, "Làm việc này để làm gì?", true));
+  A.appendChild(a2);
+  m.appendChild(A);
+
+  /* --- B --- */
+  var B = nhomMoi("Thông tin của ai, gồm những gì");
+
+  var b1 = cauMoi("Việc này đụng tới thông tin của những ai", "Chọn nhóm người <b>có thông tin bị xử lý</b>, không phải người giữ thông tin.");
+  b1.appendChild(oChips(CHU_DL, p.chuDL));
+  B.appendChild(b1);
+
+  var b2 = cauMoi("Khoảng bao nhiêu người", "Đếm <b>số người</b>, không đếm số lượt. Ước chừng là được, không cần chính xác.");
+  var hang2 = el("div","hang");
+  var o1 = el("input","o so"); o1.type="text"; o1.inputMode="numeric"; o1.placeholder="2000"; o1.value = p.soNam||"";
+  o1.oninput = function(){ p.soNam = o1.value; luu(); };
+  var l1 = el("span", null, "người mỗi năm"); l1.style.fontSize=".9rem";
+  var o2 = el("input","o so"); o2.type="text"; o2.inputMode="numeric"; o2.placeholder="15000"; o2.value = p.soLuu||"";
+  o2.oninput = function(){ p.soLuu = o2.value; luu(); };
+  var l2 = el("span", null, "người đang còn lưu"); l2.style.fontSize=".9rem";
+  hang2.appendChild(o1); hang2.appendChild(l1); hang2.appendChild(o2); hang2.appendChild(l2);
+  b2.appendChild(hang2);
+  b2.appendChild(nutKhongRo(function(){ p.soNam="Không rõ"; p.soLuu="Không rõ"; }, ve));
+  B.appendChild(b2);
+
+  var b3 = cauMoi("Có thông tin của trẻ em không",
+    "Tính cả người mất hoặc hạn chế năng lực hành vi dân sự, người khó khăn trong nhận thức.");
+  b3.appendChild(oRadio(["Có","Không","Không rõ"], function(){return p.treEm}, function(v){p.treEm=v}));
+  b3.appendChild(giaiThich("Trẻ em và người không tự thực hiện được quyền của mình phải do người đại diện quyết định thay, nên Bệnh viện cần biết việc nào có nhóm này."));
+  B.appendChild(b3);
+
+  var b4 = cauMoi("Việc này ghi lại những thông tin nào", "Bấm vào mọi ô có xuất hiện trong sổ, phiếu, file hay phần mềm bạn dùng.");
+  var hienNS = el("div");
+  function veNS(){
+    hienNS.innerHTML = "";
+    var d = diemNhayCam(p);
+    if(d.length){
+      var b = el("div","bao do");
+      var ds = d.map(function(x){ return "điểm " + x + " – " + NHAY_CAM[x].toLowerCase(); }).join("; ");
+      b.innerHTML = "<b>Việc này có dữ liệu nhạy cảm:</b> " + ds +
+        ". Hệ thống tự nhận ra từ các ô bạn đã chọn, bạn không phải tra bảng.";
+      hienNS.appendChild(b);
+    } else if(p.truong.length){
+      var b2x = el("div","bao xanh");
+      b2x.innerHTML = "<b>Chưa thấy dữ liệu nhạy cảm</b> trong các ô bạn chọn. Nếu việc này có đụng tới sức khỏe, xét nghiệm hay hình ảnh người bệnh thì chọn thêm cho đủ.";
+      hienNS.appendChild(b2x);
+    }
+  }
+  b4.appendChild(oChips(TRUONG, p.truong, veNS, true));
+  b4.appendChild(hienNS);
+  veNS();
+  B.appendChild(b4);
+
+  var b5 = cauMoi("Thông tin đó từ đâu tới");
+  b5.appendChild(oChips(NGUON, p.nguon));
+  B.appendChild(b5);
+  m.appendChild(B);
+
+  /* --- C --- */
+  var C = nhomMoi("Giữ ở đâu, ai xem được, đưa cho ai");
+
+  var c1 = cauMoi("Thông tin được giữ ở những đâu", "Chọn <b>mọi nơi</b> có bản sao, kể cả sổ tay, file Excel và nhóm chat.");
+  var hienRui = el("div");
+  function veRui(){
+    hienRui.innerHTML = "";
+    var rui = ["Nhóm trò chuyện trên ứng dụng nhắn tin","USB, ổ cứng rời","Điện thoại cá nhân"];
+    var co = rui.filter(function(r){ return p.noiLuu.indexOf(r) >= 0; });
+    if(co.length){
+      var b = el("div","bao");
+      b.innerHTML = "<b>Đã ghi nhận:</b> " + co.join(", ").toLowerCase() +
+        ". Cứ để nguyên — đây đúng là thứ Bệnh viện cần biết để có phương án. Không ai bị quy trách nhiệm vì khai thật.";
+      hienRui.appendChild(b);
+    }
+  }
+  c1.appendChild(oChips(NOI_LUU, p.noiLuu, veRui));
+  c1.appendChild(hienRui);
+  veRui();
+  C.appendChild(c1);
+
+  var c2 = cauMoi("Ai được xem và sửa");
+  c2.appendChild(oChips(AI_XEM, p.aiXem));
+  var h2 = el("div","hang");
+  h2.style.marginTop = ".5rem";
+  var on = el("input","o so"); on.type="text"; on.inputMode="numeric"; on.placeholder="8"; on.value = p.soNguoi||"";
+  on.oninput = function(){ p.soNguoi = on.value; luu(); };
+  var ln = el("span", null, "người tất cả"); ln.style.fontSize=".9rem";
+  h2.appendChild(on); h2.appendChild(ln);
+  c2.appendChild(h2);
+  C.appendChild(c2);
+
+  var c3 = cauMoi("Trong Bệnh viện, thông tin này đi tới đâu");
+  c3.appendChild(oChips(TRONG_BV, p.trongBV));
+  C.appendChild(c3);
+
+  var c4 = cauMoi("Ngoài Bệnh viện có ai nhận không",
+    "Ví dụ: <b>Bảo hiểm xã hội</b>, <b>Sở Y tế</b>, <b>Trung tâm DI &amp; ADR Quốc gia</b>, <b>công ty cung cấp phần mềm</b>, <b>nhà thầu</b>.");
+  c4.appendChild(oChu(function(){return p.ngoaiBV}, function(v){p.ngoaiBV=v}, "Ghi tên tổ chức, hoặc ghi: Không", true));
+  c4.appendChild(nutKhongRo(function(){ p.ngoaiBV="Không rõ"; }, ve));
+  C.appendChild(c4);
+
+  var c5 = cauMoi("Có gửi ra nước ngoài không",
+    "Tính cả việc dùng thư điện tử, lưu trữ trực tuyến hoặc công cụ trí tuệ nhân tạo của nhà cung cấp nước ngoài.");
+  c5.appendChild(oRadio(["Có","Không","Không rõ"], function(){return p.nuocNgoai}, function(v){p.nuocNgoai=v}));
+  C.appendChild(c5);
+
+  var c6 = cauMoi("Có hỏi ý kiến người ta trước khi thu thập không");
+  c6.appendChild(oRadio(["Có, ký vào biểu mẫu","Không, làm theo quy định pháp luật","Không rõ"],
+    function(){return p.dongY}, function(v){p.dongY=v}));
+  var cbm = el("div");
+  cbm.style.marginTop = ".5rem";
+  cbm.appendChild(oChu(function(){return p.bieuMau}, function(v){p.bieuMau=v}, "Nếu có biểu mẫu, ghi tên biểu mẫu và nơi lưu phiếu đã ký"));
+  c6.appendChild(cbm);
+  c6.appendChild(giaiThich("Bệnh viện phải chứng minh được căn cứ xử lý dữ liệu. Nhiều việc trong bệnh viện không cần xin đồng ý vì pháp luật đã quy định phải làm — bạn không phải tự kết luận, chỉ cần ghi thực tế đang làm thế nào."));
+  C.appendChild(c6);
+  m.appendChild(C);
+
+  /* --- D --- */
+  var D = nhomMoi("Giữ bao lâu và bảo vệ thế nào");
+
+  var d1 = cauMoi("Giữ trong bao lâu rồi mới bỏ");
+  d1.appendChild(oRadio(["Theo quy định đã có","Chưa có quy định","Không rõ"],
+    function(){return p.luuLau}, function(v){p.luuLau=v}));
+  var dl = el("div");
+  dl.style.marginTop = ".5rem";
+  dl.appendChild(oChu(function(){return p.luuGhi}, function(v){p.luuGhi=v}, "Nếu có quy định, ghi số năm và căn cứ; cách hủy khi hết hạn"));
+  d1.appendChild(dl);
+  D.appendChild(d1);
+
+  var d2 = cauMoi("Hiện đang bảo vệ bằng cách nào", "Chọn thật, chọn cả ô cuối nếu chưa có gì.");
+  D.appendChild(d2);
+  d2.appendChild(oChips(BAO_VE, p.baoVe));
+
+  var d3 = cauMoi("Có sự cố, vướng mắc hay đề xuất gì không",
+    "Ví dụ: <b>đã có lần gửi nhầm file cho khoa khác</b>, <b>tủ hồ sơ hỏng khóa từ lâu</b>, <b>đề nghị tập huấn</b>. Không có thì bỏ trống.");
+  d3.appendChild(oChu(function(){return p.ghiChu}, function(v){p.ghiChu=v}, "", true));
+  D.appendChild(d3);
+  m.appendChild(D);
+
+  var vt = 3 + (thuTu - 1);
+  m.appendChild(dieuHuong(vt-1, vt+1, null, null,
+    thuTu < S.chon.length ? "Sang việc tiếp theo" : "Xem lại trước khi nộp"));
+}
+
+function manXong(m){
+  var h = el("h1", null, "Xem lại rồi nộp");
+  h.style.marginBottom = ".5rem";
+  m.appendChild(h);
+  var p = el("p", null, "Đọc lướt một lượt. Muốn sửa chỗ nào thì bấm Sửa ở ngay khối đó.");
+  p.style.color = "var(--chu-mo)";
+  p.style.marginBottom = "1.25rem";
+  m.appendChild(p);
+
+  var tn = el("section","tomtat");
+  tn.appendChild(el("h3", null, "Người điền"));
+  var dl0 = el("dl");
+  them(dl0, "Họ tên", S.nguoi.hoTen || "—");
+  them(dl0, "Chức danh", S.nguoi.chucDanh || "—");
+  them(dl0, "Bộ phận", S.nguoi.boPhan || "—");
+  tn.appendChild(dl0);
+  m.appendChild(tn);
+
+  S.chon.forEach(function(id, i){
+    var ph = layPhieu(id);
+    var box = el("section","tomtat");
+    var tieu = el("h3", null, "Việc " + (i+1) + ". " + (ph.ten || id));
+    box.appendChild(tieu);
+    var dl = el("dl");
+    them(dl, "Mục đích", ph.mucDich || "—");
+    them(dl, "Thông tin của ai", ph.chuDL.join(", ") || "—");
+    them(dl, "Số người", (ph.soNam||"—") + " mỗi năm · đang lưu " + (ph.soLuu||"—"));
+    them(dl, "Có trẻ em", ph.treEm || "—");
+    them(dl, "Thông tin ghi lại", ph.truong.join(", ") || "—");
+    var d = diemNhayCam(ph);
+    them(dl, "Dữ liệu nhạy cảm", d.length ? d.map(function(x){return "điểm "+x+" – "+NHAY_CAM[x].toLowerCase();}).join("; ") : "Không có");
+    them(dl, "Nguồn", ph.nguon.join(", ") || "—");
+    them(dl, "Nơi lưu", ph.noiLuu.join(", ") || "—");
+    them(dl, "Ai xem được", (ph.aiXem.join(", ") || "—") + (ph.soNguoi ? " (" + ph.soNguoi + " người)" : ""));
+    them(dl, "Trong Bệnh viện", ph.trongBV.join(", ") || "—");
+    them(dl, "Ngoài Bệnh viện", ph.ngoaiBV || "—");
+    them(dl, "Ra nước ngoài", ph.nuocNgoai || "—");
+    them(dl, "Đồng ý", (ph.dongY || "—") + (ph.bieuMau ? " · " + ph.bieuMau : ""));
+    them(dl, "Lưu bao lâu", (ph.luuLau || "—") + (ph.luuGhi ? " · " + ph.luuGhi : ""));
+    them(dl, "Bảo vệ", ph.baoVe.join(", ") || "—");
+    them(dl, "Ghi chú", ph.ghiChu || "—");
+    box.appendChild(dl);
+    var s = el("button","nut phu","Sửa việc này");
+    s.type = "button";
+    s.style.margin = "0 1rem 1rem";
+    s.onclick = function(){ di(3 + i); };
+    box.appendChild(s);
+    m.appendChild(box);
+  });
+
+  var np = nhomMoi("Nộp phiếu");
+  var vungNop = el("div");
+  np.appendChild(vungNop);
+  veNop(vungNop);
+  m.appendChild(np);
+
+  var dh = el("div","dieuhuong");
+  var lui = el("button","nut phu","Quay lại");
+  lui.type = "button";
+  lui.onclick = function(){ di(cacBuoc().length - 2); };
+  dh.appendChild(lui);
+  m.appendChild(dh);
+}
+function them(dl, k, v){
+  dl.appendChild(el("dt", null, k));
+  dl.appendChild(el("dd", null, v));
+}
+
+function goiDuLieu(){
+  return {
+    maPhieu: S.maPhieu,
+    nguoi: S.nguoi,
+    napLuc: new Date().toISOString(),
+    viec: S.chon.map(function(id){
+      var ph = layPhieu(id);
+      var o = JSON.parse(JSON.stringify(ph));
+      o.id = id;
+      o.nhayCam = diemNhayCam(ph);
+      o.truongCoBan = ph.truong.filter(function(t){ return !laNhayCam(t); });
+      o.truongNhayCam = ph.truong.filter(laNhayCam);
+      return o;
+    })
+  };
+}
+
+function veNop(v){
+  v.innerHTML = "";
+  if(daNop){
+    var ok = el("div","bao xanh");
+    ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của bạn đã vào bảng tổng hợp của khoa. " +
+      "Nếu phát hiện cần sửa, cứ sửa rồi bấm nộp lại — bản mới sẽ thay bản cũ, không bị trùng.";
+    v.appendChild(ok);
+  }
+
+  if(!DIA_CHI_NOP){
+    var c = el("div","bao");
+    c.innerHTML = "<b>Trang này chưa nối với nơi nhận phiếu.</b> Bạn vẫn điền và chép phiếu gửi email bình thường. " +
+      "Người tổng hợp của khoa cần dán đường dẫn nộp vào trang trước đã.";
+    v.appendChild(c);
+    var h0 = el("div","dieuhuong");
+    var b0 = el("button","nut lon","Chép phiếu để gửi email");
+    b0.type = "button";
+    b0.onclick = function(){ moChep(v); };
+    h0.appendChild(b0);
+    v.appendChild(h0);
+    return;
+  }
+
+  var cm = cauMoi("Mã khoa", "Người tổng hợp của khoa đã báo mã này. Gõ sai thì không nộp được.");
+  var om = el("input","o");
+  om.type = "text";
+  om.placeholder = "Ví dụ: DUOC2026";
+  om.autocapitalize = "characters";
+  try{ om.value = localStorage.getItem(KHOA_MA) || ""; }catch(e){}
+  om.style.maxWidth = "16rem";
+  cm.appendChild(om);
+  v.appendChild(cm);
+
+  var hang = el("div","dieuhuong");
+  var nNop = el("button","nut lon", daNop ? "Nộp lại bản mới" : "Nộp phiếu");
+  nNop.type = "button";
+  nNop.onclick = function(){ nop(nNop, v, om); };
+  hang.appendChild(nNop);
+
+  var nChep = el("button","nut phu","Chép phiếu để gửi email");
+  nChep.type = "button";
+  nChep.onclick = function(){ moChep(v); };
+  hang.appendChild(nChep);
+  v.appendChild(hang);
+
+  var g = el("p", null, "Nộp xong là xong việc của bạn. Nếu máy không nộp được vì mạng cơ quan chặn, dùng nút bên cạnh để chép nội dung rồi dán vào email nội bộ gửi người tổng hợp.");
+  g.style.color = "var(--chu-mo)";
+  g.style.fontSize = ".85rem";
+  g.style.marginTop = ".75rem";
+  v.appendChild(g);
+}
+
+function nop(nut, vung, oMa){
+  var ma = ((oMa && oMa.value) || "").trim();
+  if(!ma){ loiNop(vung, "Bạn chưa gõ mã khoa.", false); return; }
+  try{ localStorage.setItem(KHOA_MA, ma); }catch(e){}
+
+  nut.disabled = true;
+  nut.textContent = "Đang nộp...";
+  var than = new URLSearchParams();
+  than.set("ma", ma);
+  than.set("payload", JSON.stringify(goiDuLieu()));
+
+  fetch(DIA_CHI_NOP, {method:"POST", body: than})
+    .then(function(r){ return r.json(); })
+    .then(function(k){
+      nut.disabled = false;
+      if(k && k.ok){ daNop = true; veNop(vung); window.scrollTo({top:0}); return; }
+      nut.textContent = "Nộp phiếu";
+      if(k && k.loi === "ma_sai"){
+        loiNop(vung, "Mã khoa không đúng. Hỏi lại người tổng hợp của khoa rồi gõ lại.", false);
+      } else {
+        loiNop(vung, "Nơi nhận phiếu báo lỗi, chưa lưu được.", true);
+      }
+    })["catch"](function(){
+      nut.disabled = false;
+      nut.textContent = "Nộp phiếu";
+      loiNop(vung, "Không gửi được — có thể do mạng cơ quan chặn hoặc đường dẫn nộp chưa đúng.", true);
+    });
+}
+
+function loiNop(vung, vi, moChepLuon){
+  var cu = vung.querySelector(".bao.loiNop");
+  if(cu) cu.remove();
+  var b = el("div","bao do loiNop");
+  b.innerHTML = "<b>Chưa nộp được.</b> " + vi +
+    (moChepLuon ? " Bạn bấm <b>Chép phiếu để gửi email</b>, dán vào email nội bộ gửi người tổng hợp của khoa là xong — không mất công điền lại." : "");
+  vung.appendChild(b);
+  if(moChepLuon) moChep(vung);
+}
+
+function moChep(vung){
+  var cu = vung.querySelector(".vungChep");
+  if(cu){ cu.scrollIntoView({block:"nearest"}); return; }
+  var w = el("div","vungChep");
+  w.style.marginTop = "1rem";
+  var nd = vanBanPhieu(goiDuLieu());
+  var ta = el("textarea","chep");
+  ta.readOnly = true;
+  ta.value = nd;
+  w.appendChild(ta);
+  var h = el("div","dieuhuong");
+  var b = el("button","nut","Chép toàn bộ");
+  b.type = "button";
+  b.onclick = function(){
+    var xong = function(){ b.textContent = "Đã chép"; setTimeout(function(){ b.textContent = "Chép toàn bộ"; }, 2500); };
+    try{
+      navigator.clipboard.writeText(nd).then(xong)["catch"](function(){ ta.select(); b.textContent = "Nhấn Ctrl+C"; });
+    }catch(e){ ta.select(); b.textContent = "Nhấn Ctrl+C"; }
+  };
+  h.appendChild(b);
+  var t = el("a","nut phu","Tải về máy");
+  t.href = URL.createObjectURL(new Blob([nd], {type:"text/plain;charset=utf-8"}));
+  t.download = "phieu-" + (S.nguoi.hoTen || "khoaduoc").replace(/\s+/g,"-") + ".txt";
+  t.style.textDecoration = "none";
+  h.appendChild(t);
+  w.appendChild(h);
+  var g = el("p", null, "Dán nguyên khối này vào email nội bộ. Người tổng hợp dán lại vào trang gộp là ra phiếu hoàn chỉnh.");
+  g.style.color = "var(--chu-mo)"; g.style.fontSize = ".85rem"; g.style.marginTop = ".5rem";
+  w.appendChild(g);
+  vung.appendChild(w);
+}
+
+function vanBanPhieu(d){
+  var r = [];
+  r.push("===== PHIEU KHAI BAO DU LIEU CA NHAN - KHOA DUOC =====");
+  r.push("Ma phieu: " + d.maPhieu);
+  r.push("Nguoi dien: " + d.nguoi.hoTen + " | " + d.nguoi.chucDanh + " | " + d.nguoi.boPhan);
+  r.push("");
+  d.viec.forEach(function(v, i){
+    r.push("--- VIEC " + (i+1) + " ---");
+    r.push("1. Ten hoat dong: " + v.ten);
+    r.push("2. Muc dich: " + v.mucDich);
+    r.push("3. Du lieu cua ai: " + v.chuDL.join(", ") + " | " + v.soNam + " nguoi/nam | dang luu " + v.soLuu);
+    r.push("4. Tre em: " + v.treEm);
+    r.push("5. Du lieu thu thap: " + v.truong.join(", "));
+    r.push("6. Nhay cam: " + (v.nhayCam.length ? v.nhayCam.map(function(x){return "diem " + x;}).join(", ") : "Khong"));
+    r.push("7. Nguon: " + v.nguon.join(", "));
+    r.push("8. Dong y: " + v.dongY + (v.bieuMau ? " | " + v.bieuMau : ""));
+    r.push("9. Noi luu: " + v.noiLuu.join(", "));
+    r.push("10. Ai xem sua: " + v.aiXem.join(", ") + (v.soNguoi ? " (" + v.soNguoi + " nguoi)" : ""));
+    r.push("11. Chia se: trong BV: " + v.trongBV.join(", ") + " | ngoai BV: " + v.ngoaiBV + " | nuoc ngoai: " + v.nuocNgoai);
+    r.push("12. Luu bao lau: " + v.luuLau + (v.luuGhi ? " | " + v.luuGhi : ""));
+    r.push("13. Bao ve: " + v.baoVe.join(", "));
+    r.push("14. Ghi chu: " + v.ghiChu);
+    r.push("");
+  });
+  r.push("===== HET =====");
+  r.push("@@JSON@@" + JSON.stringify(d));
+  return r.join("\n");
+}
+
+/* ===================== TRANG GỘP ===================== */
+
+function manTongHop(m){
+  var h = el("h1", null, "Gộp phiếu của cả khoa");
+  h.style.marginBottom = ".5rem";
+  m.appendChild(h);
+  var p = el("p", null, "Dành cho người tổng hợp. Phiếu nộp thẳng vào kho chung hiện ngay ở đây; phiếu gửi qua email thì dán vào ô bên dưới.");
+  p.style.color = "var(--chu-mo)";
+  p.style.marginBottom = "1.25rem";
+  m.appendChild(p);
+
+  var kho = nhomMoi("Phiếu đã nộp vào kho chung");
+  var ds = el("div");
+  ds.appendChild(el("p","vidu","Đang đọc kho chung..."));
+  kho.appendChild(ds);
+  m.appendChild(kho);
+
+  var thu = [];
+  var dan = nhomMoi("Dán phiếu nhận qua email", "Dán từng khối, mỗi lần một phiếu, rồi bấm Thêm.");
+  var ta = el("textarea","chep");
+  ta.placeholder = "Dán nguyên khối ===== PHIEU KHAI BAO ... vào đây";
+  dan.appendChild(ta);
+  var dh = el("div","dieuhuong");
+  var nt = el("button","nut","Thêm phiếu này");
+  nt.type = "button";
+  var bao = el("div");
+  nt.onclick = function(){
+    var v = ta.value;
+    var k = v.indexOf("@@JSON@@");
+    bao.innerHTML = "";
+    if(k < 0){
+      var e = el("div","bao do");
+      e.innerHTML = "<b>Không đọc được.</b> Khối dán vào phải còn nguyên dòng cuối bắt đầu bằng @@JSON@@.";
+      bao.appendChild(e);
+      return;
+    }
+    try{
+      var o = JSON.parse(v.slice(k + 8));
+      thu.push(o);
+      ta.value = "";
+      var ok = el("div","bao xanh");
+      ok.innerHTML = "<b>Đã thêm</b> phiếu của " + (o.nguoi && o.nguoi.hoTen ? o.nguoi.hoTen : "(không rõ tên)") +
+        " — " + (o.viec ? o.viec.length : 0) + " việc.";
+      bao.appendChild(ok);
+      veKetQua();
+    }catch(err){
+      var e2 = el("div","bao do");
+      e2.innerHTML = "<b>Khối dán bị cắt mất một phần.</b> Nhờ người gửi chép lại cho đủ.";
+      bao.appendChild(e2);
+    }
+  };
+  dh.appendChild(nt);
+  dan.appendChild(dh);
+  dan.appendChild(bao);
+  m.appendChild(dan);
+
+  var kq = nhomMoi("Bảng C.2 và các phiếu C.3 để dán vào Word");
+  var vungKQ = el("div");
+  kq.appendChild(vungKQ);
+  m.appendChild(kq);
+
+  var tuKho = [];
+  function veKetQua(){
+    var tatCa = tuKho.concat(thu);
+    vungKQ.innerHTML = "";
+    if(!tatCa.length){
+      vungKQ.appendChild(el("p","vidu","Chưa có phiếu nào. Khi có phiếu, bảng tổng hợp hiện ở đây."));
+      return;
+    }
+    var hd = [];
+    tatCa.forEach(function(d){
+      (d.viec||[]).forEach(function(v){
+        hd.push({v:v, nguoi:(d.nguoi&&d.nguoi.hoTen)||""});
+      });
+    });
+    var tt = el("p", null, tatCa.length + " người đã điền · " + hd.length + " việc được khai");
+    tt.style.fontWeight = "600";
+    tt.style.marginBottom = ".75rem";
+    vungKQ.appendChild(tt);
+
+    var cuon = el("div","cuon");
+    var bg = el("table","bang");
+    var tr = el("tr");
+    ["STT","Tên hoạt động","Dữ liệu của ai","Nhạy cảm","Người khai"].forEach(function(x){ tr.appendChild(el("th",null,x)); });
+    bg.appendChild(tr);
+    hd.forEach(function(x, i){
+      var r = el("tr");
+      r.appendChild(el("td",null,String(i+1)));
+      r.appendChild(el("td",null,x.v.ten||""));
+      r.appendChild(el("td",null,(x.v.chuDL||[]).join(", ")));
+      r.appendChild(el("td",null,(x.v.nhayCam&&x.v.nhayCam.length) ? ("Có – " + x.v.nhayCam.map(function(y){return "điểm "+y;}).join(", ")) : "Không"));
+      r.appendChild(el("td",null,x.nguoi));
+      bg.appendChild(r);
+    });
+    cuon.appendChild(bg);
+    vungKQ.appendChild(cuon);
+
+    var vb = el("textarea","chep");
+    vb.readOnly = true;
+    vb.style.marginTop = "1rem";
+    vb.value = vanBanTongHop(hd);
+    vungKQ.appendChild(vb);
+
+    var h2 = el("div","dieuhuong");
+    var bc = el("button","nut","Chép toàn bộ để dán vào Word");
+    bc.type = "button";
+    bc.onclick = function(){
+      try{
+        navigator.clipboard.writeText(vb.value).then(function(){
+          bc.textContent = "Đã chép"; setTimeout(function(){ bc.textContent = "Chép toàn bộ để dán vào Word"; }, 2500);
+        })["catch"](function(){ vb.select(); bc.textContent = "Nhấn Ctrl+C"; });
+      }catch(e){ vb.select(); bc.textContent = "Nhấn Ctrl+C"; }
+    };
+    h2.appendChild(bc);
+    var bj = el("button","nut phu","Chép dữ liệu thô (JSON)");
+    bj.type = "button";
+    bj.onclick = function(){
+      var j = JSON.stringify(tatCa, null, 1);
+      try{ navigator.clipboard.writeText(j).then(function(){ bj.textContent = "Đã chép"; setTimeout(function(){ bj.textContent="Chép dữ liệu thô (JSON)"; },2500); })["catch"](function(){}); }catch(e){}
+    };
+    h2.appendChild(bj);
+    vungKQ.appendChild(h2);
+  }
+  veKetQua();
+
+  var veLai = el("div","dieuhuong");
+  var vl = el("button","nut phu","Về trang điền phiếu");
+  vl.type = "button";
+  vl.onclick = function(){ location.hash = ""; };
+  veLai.appendChild(vl);
+  m.appendChild(veLai);
+
+  function nhacDanTay(loi){
+    ds.innerHTML = "";
+    var b = el("div","bao");
+    b.innerHTML = "<b>" + loi + "</b> Phần dán tay bên dưới vẫn dùng bình thường.";
+    ds.appendChild(b);
+  }
+
+  function tai(ma){
+    ds.innerHTML = "";
+    ds.appendChild(el("p","vidu","Đang đọc bảng tổng hợp..."));
+    fetch(DIA_CHI_NOP + "?key=" + encodeURIComponent(ma))
+      .then(function(r){ return r.json(); })
+      .then(function(k){
+        if(!k || !k.ok){ nhacDanTay("Mã quản trị không đúng."); return; }
+        try{ localStorage.setItem("dpia-khoaduoc-quantri", ma); }catch(e){}
+        tuKho = k.phieu || [];
+        ds.innerHTML = "";
+        if(!tuKho.length){
+          ds.appendChild(el("p","vidu","Chưa ai nộp vào bảng tổng hợp."));
+        } else {
+          var ul = el("div","chips");
+          tuKho.forEach(function(d){
+            var c = el("span","chip");
+            c.setAttribute("aria-pressed","true");
+            c.textContent = ((d.nguoi && d.nguoi.hoTen) || "(không rõ)") + " · " + ((d.viec && d.viec.length) || 0) + " việc";
+            ul.appendChild(c);
+          });
+          ds.appendChild(ul);
+        }
+        var lam = el("button","nut phu","Đọc lại");
+        lam.type = "button";
+        lam.style.marginTop = ".75rem";
+        lam.onclick = function(){ tai(ma); };
+        ds.appendChild(lam);
+        veKetQua();
+      })["catch"](function(){
+        nhacDanTay("Không đọc được bảng tổng hợp.");
+      });
+  }
+
+  if(!DIA_CHI_NOP){
+    nhacDanTay("Trang chưa nối với nơi nhận phiếu.");
+  } else {
+    ds.innerHTML = "";
+    var cq = cauMoi("Mã quản trị", "Mã bạn đặt trong Apps Script. Chỉ người tổng hợp giữ mã này.");
+    var oq = el("input","o");
+    oq.type = "password";
+    oq.style.maxWidth = "16rem";
+    try{ oq.value = localStorage.getItem("dpia-khoaduoc-quantri") || ""; }catch(e){}
+    cq.appendChild(oq);
+    var hq = el("div","dieuhuong");
+    var bq = el("button","nut","Đọc phiếu đã nộp");
+    bq.type = "button";
+    bq.onclick = function(){ if(oq.value.trim()) tai(oq.value.trim()); };
+    hq.appendChild(bq);
+    cq.appendChild(hq);
+    ds.appendChild(cq);
+    if(oq.value.trim()) tai(oq.value.trim());
+  }
+}
+
+function vanBanTongHop(hd){
+  var r = [];
+  r.push("C.2. DANH SACH HOAT DONG CUA DON VI");
+  r.push("");
+  hd.forEach(function(x, i){
+    r.push((i+1) + "\t" + x.v.ten + "\t" + (x.v.chuDL||[]).join(", ") + "\t" +
+      ((x.v.nhayCam&&x.v.nhayCam.length) ? "Co" : "Khong") + "\tPhieu so " + (i+1));
+  });
+  r.push("");
+  r.push("C.3. PHIEU CHI TIET TUNG HOAT DONG");
+  hd.forEach(function(x, i){
+    var v = x.v;
+    r.push("");
+    r.push("Phieu so: " + (i+1) + " - " + v.ten);
+    r.push("1. Ten hoat dong\t" + v.ten);
+    r.push("2. Muc dich\t" + v.mucDich);
+    r.push("3. Du lieu cua ai va so luong\t" + (v.chuDL||[]).join(", ") + "; khoang " + v.soNam + " nguoi/nam; dang luu " + v.soLuu);
+    r.push("4. Co tre em\t" + v.treEm);
+    r.push("5. Du lieu co ban thu thap\t" + (v.truong||[]).filter(function(t){ return !laNhayCam(t); }).join(", "));
+    r.push("6. Du lieu nhay cam thu thap\t" + ((v.truong||[]).filter(laNhayCam).join(", ") || "Khong") +
+      ((v.nhayCam&&v.nhayCam.length) ? " (" + v.nhayCam.map(function(y){return "Diem "+y;}).join(", ") + ")" : ""));
+    r.push("7. Nguon va cach thu thap\t" + (v.nguon||[]).join(", "));
+    r.push("8. Thong bao va su dong y\t" + v.dongY + (v.bieuMau ? "; " + v.bieuMau : ""));
+    r.push("9. Noi luu\t" + (v.noiLuu||[]).join(", "));
+    r.push("10. Ai duoc xem, sua\t" + (v.aiXem||[]).join(", ") + (v.soNguoi ? " (" + v.soNguoi + " nguoi)" : ""));
+    r.push("11. Chia se cho ai\tTrong BV: " + (v.trongBV||[]).join(", ") + ". Ngoai BV: " + v.ngoaiBV + ". Ra nuoc ngoai: " + v.nuocNgoai);
+    r.push("12. Luu bao lau, xoa huy\t" + v.luuLau + (v.luuGhi ? "; " + v.luuGhi : ""));
+    r.push("13. Bien phap bao ve\t" + (v.baoVe||[]).join(", "));
+    r.push("14. Ghi chu\t" + (v.ghiChu || "Khong") + " [Nguoi khai: " + x.nguoi + "]");
+  });
+  return r.join("\n");
+}
+function laNhayCam(t){
+  for(var i=0;i<TRUONG.length;i++) if(TRUONG[i].t === t) return !!TRUONG[i].ns;
+  return false;
+}
+
+/* ===================== KHUNG ĐIỀU HƯỚNG ===================== */
+
+function dieuHuong(lui, toi, kiemTra, loi, nhanToi){
+  var w = el("div","dieuhuong");
+  if(lui >= 0){
+    var b1 = el("button","nut phu","Quay lại");
+    b1.type = "button";
+    b1.onclick = function(){ di(lui); };
+    w.appendChild(b1);
+  }
+  var b2 = el("button","nut", nhanToi || "Tiếp tục");
+  b2.type = "button";
+  b2.onclick = function(){
+    if(kiemTra && !kiemTra()){
+      var cu = w.parentNode.querySelector(".bao.canhLoi");
+      if(cu) cu.remove();
+      var e = el("div","bao canhLoi");
+      e.textContent = loi || "Còn thiếu thông tin.";
+      w.parentNode.insertBefore(e, w);
+      return;
+    }
+    di(toi);
+  };
+  w.appendChild(b2);
+  return w;
+}
+
+function capNhatThanh(){
+  var b = cacBuoc();
+  var t = document.getElementById("thanh");
+  if(t) t.style.width = Math.round(S.buoc / Math.max(1, b.length-1) * 100) + "%";
+  veTrangThai();
+}
+
+function ve(){
+  var m = document.getElementById("man");
+  m.innerHTML = "";
+  if(location.hash === "#tong-hop"){
+    var t = document.getElementById("thanh");
+    if(t) t.style.width = "100%";
+    document.getElementById("trangthai").textContent = "Trang gộp";
+    manTongHop(m);
+    chan(m);
+    return;
+  }
+  var b = cacBuoc();
+  var cur = b[Math.min(S.buoc, b.length-1)];
+  if(cur.k === "mo") manMo(m);
+  else if(cur.k === "nguoi") manNguoi(m);
+  else if(cur.k === "chon") manChon(m);
+  else if(cur.k === "phieu") manPhieu(m, cur.id, S.chon.indexOf(cur.id) + 1);
+  else manXong(m);
+  capNhatThanh();
+  chan(m);
+}
+function chan(m){
+  var c = el("div","chan");
+  c.innerHTML = "Phiếu nội bộ của Bệnh viện Truyền máu Huyết học. Chỉ mô tả loại thông tin, không ghi dữ liệu cá nhân thật. " +
+    "Căn cứ: Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, Nghị định số 356/2025/NĐ-CP, Tờ trình số 71/TTr-CNTT ngày 11/11/2026.";
+  var x = el("div");
+  x.style.marginTop = ".6rem";
+  var b = el("button","lienket","Xóa bản nháp trên máy này");
+  b.type = "button";
+  b.onclick = function(){
+    try{ localStorage.removeItem(KHOA_LUU); }catch(e){}
+    S = {nguoi:{hoTen:"",chucDanh:"",boPhan:""}, chon:[], khac:[], phieu:{}, buoc:0, maPhieu:taoMa()};
+    daNop = false;
+    ve();
+  };
+  x.appendChild(b);
+  c.appendChild(x);
+  m.appendChild(c);
+}
+
+/* ===================== KHỞI ĐỘNG ===================== */
+
+doc();
+ve();
+window.addEventListener("hashchange", ve);
+</script>
+</body>
+</html>
