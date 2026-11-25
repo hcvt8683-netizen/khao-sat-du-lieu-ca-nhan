@@ -170,10 +170,17 @@ textarea.o{min-height:4.5rem;resize:vertical;line-height:1.5}
 <script>
 /* ===================== CÀI ĐẶT ===================== */
 
-/* Dán đường dẫn /exec của Google Apps Script vào giữa hai dấu nháy.
-   Để trống thì trang vẫn điền được bình thường, chỉ là không nộp thẳng
-   vào Drive — người điền dùng nút chép rồi gửi email. */
+/* Dán đường dẫn /exec của Google Apps Script vào đây thì trang hiện nút
+   "Nộp phiếu", bấm một cái là dữ liệu chui thẳng vào Google Sheet trong
+   Drive của người tổng hợp. Để trống thì trang chuyển sang cách gửi email. */
 var DIA_CHI_NOP = "";
+
+/* Địa chỉ email của người tổng hợp phiếu trong khoa, dùng cho cách gửi email.
+   Để trống thì trang chỉ ghi chung chung là "người tổng hợp của khoa". */
+var EMAIL_NHAN = "";
+
+var daNop = false;
+var KHOA_MA = "dpia-khoaduoc-ma";
 
 /* ===================== DỮ LIỆU NỀN ===================== */
 
@@ -291,8 +298,7 @@ var S = {
   buoc:0,
   maPhieu:""
 };
-var daNop = false;
-var KHOA_MA = "dpia-khoaduoc-ma";
+
 
 function taoMa(){
   return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
@@ -884,56 +890,91 @@ function goiDuLieu(){
 
 function veNop(v){
   v.innerHTML = "";
-  if(daNop){
-    var ok = el("div","bao xanh");
-    ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của bạn đã vào bảng tổng hợp của khoa. " +
-      "Nếu phát hiện cần sửa, cứ sửa rồi bấm nộp lại — bản mới sẽ thay bản cũ, không bị trùng.";
-    v.appendChild(ok);
-  }
 
-  if(!DIA_CHI_NOP){
-    var c = el("div","bao");
-    c.innerHTML = "<b>Trang này chưa nối với nơi nhận phiếu.</b> Bạn vẫn điền và chép phiếu gửi email bình thường. " +
-      "Người tổng hợp của khoa cần dán đường dẫn nộp vào trang trước đã.";
-    v.appendChild(c);
-    var h0 = el("div","dieuhuong");
-    var b0 = el("button","nut lon","Chép phiếu để gửi email");
-    b0.type = "button";
-    b0.onclick = function(){ moChep(v); };
-    h0.appendChild(b0);
-    v.appendChild(h0);
+  /* Cách 1: có nơi nhận trên Google thì nộp thẳng, một nút là xong */
+  if(DIA_CHI_NOP){
+    if(daNop){
+      var ok = el("div","bao xanh");
+      ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của bạn đã vào bảng tổng hợp của khoa. " +
+        "Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng.";
+      v.appendChild(ok);
+    } else {
+      var gt = el("div","bao xanh");
+      gt.innerHTML = "<b>Bạn điền xong rồi.</b> Bấm Nộp phiếu là hết việc, không phải gửi email cho ai.";
+      v.appendChild(gt);
+    }
+
+    var cm = cauMoi("Mã khoa", "Người tổng hợp của khoa đã báo mã này. Gõ sai thì không nộp được.");
+    var om = el("input","o");
+    om.type = "text";
+    om.placeholder = "Ví dụ: DUOC2026";
+    om.autocapitalize = "characters";
+    try{ om.value = localStorage.getItem(KHOA_MA) || ""; }catch(e){}
+    om.style.maxWidth = "16rem";
+    cm.appendChild(om);
+    v.appendChild(cm);
+
+    var hn = el("div","dieuhuong");
+    var nNop = el("button","nut lon", daNop ? "Nộp lại bản mới" : "Nộp phiếu");
+    nNop.type = "button";
+    nNop.onclick = function(){ nop(nNop, v, om); };
+    hn.appendChild(nNop);
+    var nChep = el("button","nut phu","Hoặc chép để gửi email");
+    nChep.type = "button";
+    nChep.onclick = function(){ moChep(v); };
+    hn.appendChild(nChep);
+    v.appendChild(hn);
+
+    var gn = el("p", null, "Nếu máy không nộp được vì mạng cơ quan chặn, dùng nút bên cạnh để chép nội dung rồi gửi email — không mất công điền lại.");
+    gn.style.color = "var(--chu-mo)";
+    gn.style.fontSize = ".85rem";
+    gn.style.marginTop = ".75rem";
+    v.appendChild(gn);
     return;
   }
 
-  var cm = cauMoi("Mã khoa", "Người tổng hợp của khoa đã báo mã này. Gõ sai thì không nộp được.");
-  var om = el("input","o");
-  om.type = "text";
-  om.placeholder = "Ví dụ: DUOC2026";
-  om.autocapitalize = "characters";
-  try{ om.value = localStorage.getItem(KHOA_MA) || ""; }catch(e){}
-  om.style.maxWidth = "16rem";
-  cm.appendChild(om);
-  v.appendChild(cm);
+  /* Cách 2: chưa có nơi nhận thì gửi email */
+  var c = el("div","bao xanh");
+  c.innerHTML = "<b>Bạn điền xong rồi.</b> Việc cuối cùng là gửi khối nội dung bên dưới cho người tổng hợp " +
+    "của khoa qua email. Mất đúng một lần dán.";
+  v.appendChild(c);
 
-  var hang = el("div","dieuhuong");
-  var nNop = el("button","nut lon", daNop ? "Nộp lại bản mới" : "Nộp phiếu");
-  nNop.type = "button";
-  nNop.onclick = function(){ nop(nNop, v, om); };
-  hang.appendChild(nNop);
+  if(EMAIL_NHAN){
+    var ce = cauMoi("Gửi về địa chỉ");
+    var he = el("div","hang");
+    var oe = el("input","o");
+    oe.type = "text";
+    oe.readOnly = true;
+    oe.value = EMAIL_NHAN;
+    oe.style.maxWidth = "18rem";
+    oe.onclick = function(){ oe.select(); };
+    var be = el("button","nut phu","Chép địa chỉ");
+    be.type = "button";
+    be.onclick = function(){ chepChuoi(EMAIL_NHAN, be, "Chép địa chỉ"); };
+    he.appendChild(oe);
+    he.appendChild(be);
+    ce.appendChild(he);
+    v.appendChild(ce);
+  }
 
-  var nChep = el("button","nut phu","Chép phiếu để gửi email");
-  nChep.type = "button";
-  nChep.onclick = function(){ moChep(v); };
-  hang.appendChild(nChep);
-  v.appendChild(hang);
+  var hd = el("div","cau");
+  hd.appendChild(el("div","cau-tieu","Hai cách, làm cách nào cũng được"));
+  var vd = el("div","vidu");
+  vd.innerHTML = "<b>Cách 1 — dán thẳng vào email:</b> bấm <b>Chép toàn bộ</b>, mở email, dán vào phần nội dung rồi gửi.<br>" +
+    "<b>Cách 2 — gửi kèm file:</b> bấm <b>Tải về máy</b>, rồi đính kèm file vừa tải vào email.";
+  hd.appendChild(vd);
+  v.appendChild(hd);
 
-  var g = el("p", null, "Nộp xong là xong việc của bạn. Nếu máy không nộp được vì mạng cơ quan chặn, dùng nút bên cạnh để chép nội dung rồi dán vào email nội bộ gửi người tổng hợp.");
+  moChep(v);
+
+  var g = el("p", null, "Gửi xong là hết việc của bạn. Bản nháp vẫn nằm trên máy này, nếu cần sửa thì quay lại sửa rồi gửi bản mới.");
   g.style.color = "var(--chu-mo)";
   g.style.fontSize = ".85rem";
   g.style.marginTop = ".75rem";
   v.appendChild(g);
 }
 
+/* Gửi phiếu thẳng tới Google Apps Script */
 function nop(nut, vung, oMa){
   var ma = ((oMa && oMa.value) || "").trim();
   if(!ma){ loiNop(vung, "Bạn chưa gõ mã khoa.", false); return; }
@@ -968,9 +1009,20 @@ function loiNop(vung, vi, moChepLuon){
   if(cu) cu.remove();
   var b = el("div","bao do loiNop");
   b.innerHTML = "<b>Chưa nộp được.</b> " + vi +
-    (moChepLuon ? " Bạn bấm <b>Chép phiếu để gửi email</b>, dán vào email nội bộ gửi người tổng hợp của khoa là xong — không mất công điền lại." : "");
+    (moChepLuon ? " Bạn bấm <b>Hoặc chép để gửi email</b>, dán vào email gửi người tổng hợp của khoa là xong — không mất công điền lại." : "");
   vung.appendChild(b);
   if(moChepLuon) moChep(vung);
+}
+
+/* Chép một chuỗi vào bộ nhớ tạm, có báo lại trên chính cái nút vừa bấm */
+function chepChuoi(chuoi, nut, chuGoc){
+  var xong = function(){
+    nut.textContent = "Đã chép";
+    setTimeout(function(){ nut.textContent = chuGoc; }, 2500);
+  };
+  try{
+    navigator.clipboard.writeText(chuoi).then(xong)["catch"](function(){ nut.textContent = "Chép không được"; });
+  }catch(e){ nut.textContent = "Chép không được"; }
 }
 
 function moChep(vung){
@@ -997,6 +1049,7 @@ function moChep(vung){
   t.href = URL.createObjectURL(new Blob([nd], {type:"text/plain;charset=utf-8"}));
   t.download = "phieu-" + (S.nguoi.hoTen || "khoaduoc").replace(/\s+/g,"-") + ".txt";
   t.style.textDecoration = "none";
+  t.style.display = "inline-block";
   h.appendChild(t);
   w.appendChild(h);
   var g = el("p", null, "Dán nguyên khối này vào email nội bộ. Người tổng hợp dán lại vào trang gộp là ra phiếu hoàn chỉnh.");
@@ -1040,19 +1093,74 @@ function manTongHop(m){
   var h = el("h1", null, "Gộp phiếu của cả khoa");
   h.style.marginBottom = ".5rem";
   m.appendChild(h);
-  var p = el("p", null, "Dành cho người tổng hợp. Phiếu nộp thẳng vào kho chung hiện ngay ở đây; phiếu gửi qua email thì dán vào ô bên dưới.");
+  var p = el("p", null, "Dành cho người tổng hợp. Mở từng email nhân viên gửi về, dán khối nội dung vào ô dưới đây, bấm Thêm. Làm hết lượt là có ngay bảng C.2 và các phiếu C.3 để dán sang file Word.");
   p.style.color = "var(--chu-mo)";
   p.style.marginBottom = "1.25rem";
   m.appendChild(p);
 
-  var kho = nhomMoi("Phiếu đã nộp vào kho chung");
-  var ds = el("div");
-  ds.appendChild(el("p","vidu","Đang đọc kho chung..."));
-  kho.appendChild(ds);
-  m.appendChild(kho);
+  var tuKho = [];
+  if(DIA_CHI_NOP){
+    var kho = nhomMoi("Phiếu nộp thẳng vào Drive", "Những người bấm nút Nộp phiếu nằm ở đây, không phải dán tay.");
+    var ds = el("div");
+    kho.appendChild(ds);
+    m.appendChild(kho);
+
+    var baoKho = function(loi){
+      ds.innerHTML = "";
+      var b = el("div","bao");
+      b.innerHTML = "<b>" + loi + "</b> Phần dán tay bên dưới vẫn dùng bình thường.";
+      ds.appendChild(b);
+    };
+
+    var tai = function(ma){
+      ds.innerHTML = "";
+      ds.appendChild(el("p","vidu","Đang đọc bảng tổng hợp..."));
+      fetch(DIA_CHI_NOP + "?key=" + encodeURIComponent(ma))
+        .then(function(r){ return r.json(); })
+        .then(function(k){
+          if(!k || !k.ok){ baoKho("Mã quản trị không đúng."); return; }
+          try{ localStorage.setItem("dpia-khoaduoc-quantri", ma); }catch(e){}
+          tuKho = k.phieu || [];
+          ds.innerHTML = "";
+          if(!tuKho.length){
+            ds.appendChild(el("p","vidu","Chưa ai bấm nộp thẳng."));
+          } else {
+            var ul = el("div","chips");
+            tuKho.forEach(function(d){
+              var cc = el("span","chip");
+              cc.setAttribute("aria-pressed","true");
+              cc.textContent = ((d.nguoi && d.nguoi.hoTen) || "(không rõ)") + " · " + ((d.viec && d.viec.length) || 0) + " việc";
+              ul.appendChild(cc);
+            });
+            ds.appendChild(ul);
+          }
+          var lam = el("button","nut phu","Đọc lại");
+          lam.type = "button";
+          lam.style.marginTop = ".75rem";
+          lam.onclick = function(){ tai(ma); };
+          ds.appendChild(lam);
+          veKetQua();
+        })["catch"](function(){ baoKho("Không đọc được bảng tổng hợp."); });
+    };
+
+    var cq = cauMoi("Mã quản trị", "Mã bạn đặt trong Code.gs. Chỉ người tổng hợp giữ mã này.");
+    var oq = el("input","o");
+    oq.type = "password";
+    oq.style.maxWidth = "16rem";
+    try{ oq.value = localStorage.getItem("dpia-khoaduoc-quantri") || ""; }catch(e){}
+    cq.appendChild(oq);
+    var hq = el("div","dieuhuong");
+    var bq = el("button","nut","Đọc phiếu đã nộp");
+    bq.type = "button";
+    bq.onclick = function(){ if(oq.value.trim()) tai(oq.value.trim()); };
+    hq.appendChild(bq);
+    cq.appendChild(hq);
+    ds.appendChild(cq);
+    if(oq.value.trim()) tai(oq.value.trim());
+  }
 
   var thu = [];
-  var dan = nhomMoi("Dán phiếu nhận qua email", "Dán từng khối, mỗi lần một phiếu, rồi bấm Thêm.");
+  var dan = nhomMoi("Dán phiếu nhận qua email", "Dán từng khối, mỗi lần một phiếu, rồi bấm Thêm. Nếu nhân viên gửi file đính kèm thì mở file đó ra, chép hết nội dung rồi dán vào đây.");
   var ta = el("textarea","chep");
   ta.placeholder = "Dán nguyên khối ===== PHIEU KHAI BAO ... vào đây";
   dan.appendChild(ta);
@@ -1095,7 +1203,6 @@ function manTongHop(m){
   kq.appendChild(vungKQ);
   m.appendChild(kq);
 
-  var tuKho = [];
   function veKetQua(){
     var tatCa = tuKho.concat(thu);
     vungKQ.innerHTML = "";
@@ -1166,65 +1273,6 @@ function manTongHop(m){
   veLai.appendChild(vl);
   m.appendChild(veLai);
 
-  function nhacDanTay(loi){
-    ds.innerHTML = "";
-    var b = el("div","bao");
-    b.innerHTML = "<b>" + loi + "</b> Phần dán tay bên dưới vẫn dùng bình thường.";
-    ds.appendChild(b);
-  }
-
-  function tai(ma){
-    ds.innerHTML = "";
-    ds.appendChild(el("p","vidu","Đang đọc bảng tổng hợp..."));
-    fetch(DIA_CHI_NOP + "?key=" + encodeURIComponent(ma))
-      .then(function(r){ return r.json(); })
-      .then(function(k){
-        if(!k || !k.ok){ nhacDanTay("Mã quản trị không đúng."); return; }
-        try{ localStorage.setItem("dpia-khoaduoc-quantri", ma); }catch(e){}
-        tuKho = k.phieu || [];
-        ds.innerHTML = "";
-        if(!tuKho.length){
-          ds.appendChild(el("p","vidu","Chưa ai nộp vào bảng tổng hợp."));
-        } else {
-          var ul = el("div","chips");
-          tuKho.forEach(function(d){
-            var c = el("span","chip");
-            c.setAttribute("aria-pressed","true");
-            c.textContent = ((d.nguoi && d.nguoi.hoTen) || "(không rõ)") + " · " + ((d.viec && d.viec.length) || 0) + " việc";
-            ul.appendChild(c);
-          });
-          ds.appendChild(ul);
-        }
-        var lam = el("button","nut phu","Đọc lại");
-        lam.type = "button";
-        lam.style.marginTop = ".75rem";
-        lam.onclick = function(){ tai(ma); };
-        ds.appendChild(lam);
-        veKetQua();
-      })["catch"](function(){
-        nhacDanTay("Không đọc được bảng tổng hợp.");
-      });
-  }
-
-  if(!DIA_CHI_NOP){
-    nhacDanTay("Trang chưa nối với nơi nhận phiếu.");
-  } else {
-    ds.innerHTML = "";
-    var cq = cauMoi("Mã quản trị", "Mã bạn đặt trong Apps Script. Chỉ người tổng hợp giữ mã này.");
-    var oq = el("input","o");
-    oq.type = "password";
-    oq.style.maxWidth = "16rem";
-    try{ oq.value = localStorage.getItem("dpia-khoaduoc-quantri") || ""; }catch(e){}
-    cq.appendChild(oq);
-    var hq = el("div","dieuhuong");
-    var bq = el("button","nut","Đọc phiếu đã nộp");
-    bq.type = "button";
-    bq.onclick = function(){ if(oq.value.trim()) tai(oq.value.trim()); };
-    hq.appendChild(bq);
-    cq.appendChild(hq);
-    ds.appendChild(cq);
-    if(oq.value.trim()) tai(oq.value.trim());
-  }
 }
 
 function vanBanTongHop(hd){
@@ -1330,7 +1378,6 @@ function chan(m){
   b.onclick = function(){
     try{ localStorage.removeItem(KHOA_LUU); }catch(e){}
     S = {nguoi:{hoTen:"",chucDanh:"",boPhan:""}, chon:[], khac:[], phieu:{}, buoc:0, maPhieu:taoMa()};
-    daNop = false;
     ve();
   };
   x.appendChild(b);
