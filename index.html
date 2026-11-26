@@ -990,73 +990,37 @@ function manPhieu(m, id, thuTu){
   m.appendChild(D);
 
   var vt = 3 + (thuTu - 1);
+  var cuoiCung = thuTu >= S.chon.length;
   m.appendChild(dieuHuong(vt-1, vt+1, null, null,
-    thuTu < S.chon.length ? "Sang việc tiếp theo" : "Xem lại trước khi nộp"));
+    cuoiCung ? (DIA_CHI_NOP ? "Nộp phiếu" : "Xong, gửi phiếu") : "Sang việc tiếp theo",
+    cuoiCung ? nopTuTrangViec : null));
 }
 
 function manXong(m){
-  var h = el("h1", null, "Xem lại rồi nộp");
-  h.style.marginBottom = ".5rem";
-  m.appendChild(h);
-  var p = el("p", null, "Đọc lướt một lượt. Muốn sửa chỗ nào thì bấm Sửa ở ngay khối đó.");
-  p.style.color = "var(--chu-mo)";
-  p.style.marginBottom = "1.25rem";
-  m.appendChild(p);
+  if(!daNop){
+    var h = el("h1", null, "Gửi phiếu");
+    h.style.marginBottom = ".5rem";
+    m.appendChild(h);
+    var p = el("p", null, "Muốn sửa chỗ nào thì bấm Quay lại.");
+    p.style.color = "var(--chu-mo)";
+    p.style.marginBottom = "1.25rem";
+    m.appendChild(p);
+  }
 
-  var tn = el("section","tomtat");
-  tn.appendChild(el("h3", null, "Người điền"));
-  var dl0 = el("dl");
-  them(dl0, "Họ tên", S.nguoi.hoTen || "—");
-  them(dl0, "Chức danh", S.nguoi.chucDanh || "—");
-  them(dl0, "Bộ phận", S.nguoi.boPhan || "—");
-  tn.appendChild(dl0);
-  m.appendChild(tn);
-
-  S.chon.forEach(function(id, i){
-    var ph = layPhieu(id);
-    var box = el("section","tomtat");
-    var tieu = el("h3", null, "Việc " + (i+1) + ". " + (ph.ten || id));
-    box.appendChild(tieu);
-    var dl = el("dl");
-    them(dl, "Mục đích", ph.mucDich || "—");
-    them(dl, "Thông tin của ai", ph.chuDL.join(", ") || "—");
-    them(dl, "Số người", (ph.soNam||"—") + " mỗi năm · đang lưu " + (ph.soLuu||"—"));
-    them(dl, "Có trẻ em", ph.treEm || "—");
-    them(dl, "Thông tin ghi lại", ph.truong.join(", ") || "—");
-    var d = diemNhayCam(ph);
-    them(dl, "Dữ liệu nhạy cảm", d.length ? d.map(function(x){return "điểm "+x+" – "+NHAY_CAM[x].toLowerCase();}).join("; ") : "Không có");
-    them(dl, "Nguồn", ph.nguon.join(", ") || "—");
-    them(dl, "Nơi lưu", ph.noiLuu.join(", ") || "—");
-    them(dl, "Ai xem được", (ph.aiXem.join(", ") || "—") + (ph.soNguoi ? " (" + ph.soNguoi + " người)" : ""));
-    them(dl, "Trong Bệnh viện", ph.trongBV.join(", ") || "—");
-    them(dl, "Ngoài Bệnh viện", ph.ngoaiBV || "—");
-    them(dl, "Ra nước ngoài", ph.nuocNgoai || "—");
-    them(dl, "Đồng ý", (ph.dongY || "—") + (ph.bieuMau ? " · " + ph.bieuMau : ""));
-    them(dl, "Lưu bao lâu", (ph.luuLau || "—") + (ph.luuGhi ? " · " + ph.luuGhi : ""));
-    them(dl, "Bảo vệ", ph.baoVe.join(", ") || "—");
-    them(dl, "Ghi chú", ph.ghiChu || "—");
-    box.appendChild(dl);
-    var s = el("button","nut phu","Sửa việc này");
-    s.type = "button";
-    s.style.margin = "0 1rem 1rem";
-    s.onclick = function(){ di(3 + i); };
-    box.appendChild(s);
-    m.appendChild(box);
-  });
-
-  var np = nhomMoi("Nộp phiếu");
+  var np = nhomMoi(daNop ? null : "Nộp phiếu");
   var vungNop = el("div");
   np.appendChild(vungNop);
   veNop(vungNop);
   m.appendChild(np);
 
   var dh = el("div","dieuhuong");
-  var lui = el("button","nut phu","Quay lại");
+  var lui = el("button","nut phu", daNop ? "Xem lại phiếu đã khai" : "Quay lại");
   lui.type = "button";
   lui.onclick = function(){ di(cacBuoc().length - 2); };
   dh.appendChild(lui);
   m.appendChild(dh);
 }
+
 function them(dl, k, v){
   dl.appendChild(el("dt", null, k));
   dl.appendChild(el("dd", null, v));
@@ -1092,7 +1056,7 @@ function veNop(v){
       xr.appendChild(el("h2", null, "Đã nộp xong"));
       xr.appendChild(el("p", null,
         "Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng."));
-      xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc anh chị buổi chiều vui vẻ."));
+      xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc anh/chị/em buổi chiều thân tâm an lạc."));
       v.appendChild(xr);
 
       var hl = el("div","dieuhuong");
@@ -1167,6 +1131,38 @@ function veNop(v){
   g.style.fontSize = ".85rem";
   g.style.marginTop = ".75rem";
   v.appendChild(g);
+}
+
+/* Bấm Nộp ngay ở trang việc cuối, không qua bước xem lại */
+function nopTuTrangViec(nut, hang){
+  var cuoi = cacBuoc().length - 1;
+  if(!DIA_CHI_NOP){ di(cuoi); return; }
+
+  nut.disabled = true;
+  nut.textContent = "Đang nộp...";
+  var than = new URLSearchParams();
+  than.set("ma", MA_KHOA);
+  than.set("payload", JSON.stringify(goiDuLieu()));
+
+  fetch(DIA_CHI_NOP, {method:"POST", body: than})
+    .then(function(r){ return r.json(); })
+    .then(function(k){
+      if(k && k.ok){ daNop = true; di(cuoi); return; }
+      hong("Nơi nhận phiếu báo lỗi, chưa lưu được.");
+    })["catch"](function(){
+      hong("Không gửi được — có thể do mạng cơ quan chặn.");
+    });
+
+  function hong(vi){
+    nut.disabled = false;
+    nut.textContent = "Nộp phiếu";
+    var cu = hang.parentNode.querySelector(".bao.do.loiNop");
+    if(cu) cu.remove();
+    var b = el("div","bao do loiNop");
+    b.innerHTML = "<b>Chưa nộp được.</b> " + vi +
+      " Bấm <b>Nộp phiếu</b> lại một lần nữa, hoặc dùng cách chép gửi email ở trang sau.";
+    hang.parentNode.insertBefore(b, hang);
+  }
 }
 
 /* Gửi phiếu thẳng tới Google Apps Script */
@@ -1501,7 +1497,7 @@ function laNhayCam(t){
 
 /* ===================== KHUNG ĐIỀU HƯỚNG ===================== */
 
-function dieuHuong(lui, toi, kiemTra, loi, nhanToi){
+function dieuHuong(lui, toi, kiemTra, loi, nhanToi, hanhDong){
   var w = el("div","dieuhuong chinh");
   if(lui >= 0){
     var b1 = el("button","nut phu","Quay lại");
@@ -1520,6 +1516,7 @@ function dieuHuong(lui, toi, kiemTra, loi, nhanToi){
       w.parentNode.insertBefore(e, w);
       return;
     }
+    if(hanhDong){ hanhDong(b2, w); return; }
     di(toi);
   };
   w.appendChild(b2);
