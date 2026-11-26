@@ -1463,12 +1463,15 @@ function chan(m){
     "Căn cứ: Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, Nghị định số 356/2025/NĐ-CP, Tờ trình số 71/TTr-CNTT ngày 11/11/2026.";
   var x = el("div");
   x.style.marginTop = ".6rem";
-  var b = el("button","lienket","Xóa bản nháp trên máy này");
+  var b = el("button","lienket","Xóa bản nháp, bắt đầu phiếu mới");
   b.type = "button";
   b.onclick = function(){
     try{ localStorage.removeItem(KHOA_LUU); }catch(e){}
     S = {nguoi:{hoTen:"",chucDanh:"",boPhan:""}, chon:[], khac:[], phieu:{}, buoc:0, maPhieu:taoMa()};
+    /* Máy dùng chung: người sau phải thấy "Nộp phiếu", không phải "Nộp lại bản mới" */
+    daNop = false;
     ve();
+    window.scrollTo({top:0});
   };
   x.appendChild(b);
   c.appendChild(x);
