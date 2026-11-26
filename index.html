@@ -12,145 +12,212 @@
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 img{max-width:100%}
 [hidden]{display:none !important}
-/* Layout: một cột hẹp, thanh tiến độ dính trên cùng, mỗi bước là một nhóm câu hỏi phẳng có viền */
+
+/* Bố cục: một cột, thanh tiến độ dính trên, thanh điều hướng dính dưới,
+   nội dung là các khối phẳng viền mảnh. Thiết kế cho điện thoại trước. */
 :root{
-  --muc: #0f4c52;        /* xanh petrol - màu chủ đạo */
-  --muc-nhat: #e3f0f0;
-  --muc-dam: #0a3539;
-  --giay: #f7f5f1;       /* nền giấy ấm */
-  --mat: #ffffff;
-  --chu: #1c2321;
-  --chu-mo: #5d6866;
-  --vien: #d8d4cc;
-  --nhan: #b4690e;       /* hổ phách - cần chú ý */
-  --nhan-nen: #fdf3e2;
-  --canh: #a32c1e;       /* đỏ trầm - dữ liệu nhạy cảm */
-  --canh-nen: #fbeae7;
-  --ok: #2b6b4f;
-  --ok-nen: #e6f2eb;
+  --nen:      #eef1f5;
+  --mat:      #ffffff;
+  --mat-2:    #f7f9fc;
+  --vien:     #d4dae3;
+  --vien-dam: #b7c0cd;
+  --chu:      #11161d;
+  --chu-mo:   #5a6775;
+  --muc:      #0d4f8b;
+  --muc-dam:  #093a68;
+  --muc-nhat: #e4eef8;
+  --nhan:     #92540a;
+  --nhan-nen: #fdf2e0;
+  --canh:     #a92a1d;
+  --canh-nen: #fceae7;
+  --ok:       #11674a;
+  --ok-nen:   #e3f2ec;
+  --bong:     0 1px 2px rgba(17,22,29,.06), 0 1px 3px rgba(17,22,29,.04);
   color-scheme: light;
   --f-tieu: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
-  --f-chu: "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-chu:  "Inter", "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --muc:#5fc3c9; --muc-nhat:#13302f; --muc-dam:#8ad8dc;
-    --giay:#13181a; --mat:#1b2225; --chu:#e8eceb; --chu-mo:#9aa8a6; --vien:#32403f;
-    --nhan:#e0a44a; --nhan-nen:#302616; --canh:#ef8b7c; --canh-nen:#331d1a;
-    --ok:#6fc49a; --ok-nen:#172b22; color-scheme: dark;
+    --nen:#0e1319; --mat:#171d26; --mat-2:#1d242e; --vien:#2e3843; --vien-dam:#3e4a58;
+    --chu:#e9edf2; --chu-mo:#9aa7b6;
+    --muc:#6aaef0; --muc-dam:#9ccaf7; --muc-nhat:#13273c;
+    --nhan:#e0a44a; --nhan-nen:#2d2415; --canh:#f08b7c; --canh-nen:#2e1a18;
+    --ok:#5fc49a; --ok-nen:#14291f;
+    --bong: 0 1px 2px rgba(0,0,0,.4);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"]{
-  --muc:#5fc3c9; --muc-nhat:#13302f; --muc-dam:#8ad8dc;
-  --giay:#13181a; --mat:#1b2225; --chu:#e8eceb; --chu-mo:#9aa8a6; --vien:#32403f;
-  --nhan:#e0a44a; --nhan-nen:#302616; --canh:#ef8b7c; --canh-nen:#331d1a;
-  --ok:#6fc49a; --ok-nen:#172b22; color-scheme: dark;
+  --nen:#0e1319; --mat:#171d26; --mat-2:#1d242e; --vien:#2e3843; --vien-dam:#3e4a58;
+  --chu:#e9edf2; --chu-mo:#9aa7b6;
+  --muc:#6aaef0; --muc-dam:#9ccaf7; --muc-nhat:#13273c;
+  --nhan:#e0a44a; --nhan-nen:#2d2415; --canh:#f08b7c; --canh-nen:#2e1a18;
+  --ok:#5fc49a; --ok-nen:#14291f;
+  --bong: 0 1px 2px rgba(0,0,0,.4);
+  color-scheme: dark;
 }
+
 *{box-sizing:border-box}
-body{background:var(--giay);color:var(--chu);font-family:var(--f-chu);font-size:16px;line-height:1.6;margin:0}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--mat)}
-h1,h2,h3{font-family:var(--f-tieu);text-wrap:balance;margin:0}
-h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em}
-h2{font-size:1.25rem;font-weight:600}
+body{background:var(--nen);color:var(--chu);font-family:var(--f-chu);
+  font-size:16px;line-height:1.62;margin:0;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--mat)}
+h1,h2,h3{font-family:var(--f-tieu);text-wrap:balance;margin:0;letter-spacing:-.015em}
+h1{font-size:clamp(1.35rem,5vw,1.75rem);font-weight:700;line-height:1.25}
+h2{font-size:clamp(1.1rem,4vw,1.3rem);font-weight:600;line-height:1.3}
 h3{font-size:1rem;font-weight:600}
 p{margin:0}
-button{font-family:inherit;font-size:1rem;cursor:pointer}
+button{font-family:inherit;font-size:1rem}
+button:not(:disabled){cursor:pointer}
 input,textarea,select{font-family:inherit;font-size:1rem}
 a{color:var(--muc)}
+:focus-visible{outline:2px solid var(--muc);outline-offset:2px;border-radius:4px}
 
-.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--mat);border-bottom:1px solid var(--vien)}
-.rail-in{max-width:760px;margin:0 auto;padding-block:.6rem;
+/* ---- thanh tiến độ trên cùng ---- */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--mat);
+  border-bottom:1px solid var(--vien)}
+.rail-in{max-width:780px;margin:0 auto;padding-block:.7rem;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.rail-ten{font-family:var(--f-tieu);font-weight:600;font-size:.95rem;color:var(--muc);min-width:0}
-.rail-trangthai{margin-left:auto;font-size:.8rem;color:var(--chu-mo);font-variant-numeric:tabular-nums}
-.thanh{height:4px;background:var(--vien);border-radius:2px;overflow:hidden;flex:1 1 120px;min-width:80px}
-.thanh i{display:block;height:100%;background:var(--muc);transition:width .3s ease}
+  display:flex;align-items:center;gap:.7rem}
+.rail-ten{font-family:var(--f-tieu);font-weight:600;font-size:.9rem;color:var(--chu);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.rail-trangthai{font-size:.78rem;color:var(--chu-mo);font-variant-numeric:tabular-nums;
+  white-space:nowrap;flex:0 0 auto}
+.thanh{height:6px;background:var(--vien);border-radius:3px;overflow:hidden;flex:1 1 60px;min-width:40px}
+.thanh i{display:block;height:100%;background:var(--muc);transition:width .35s cubic-bezier(.4,0,.2,1)}
+@media (max-width:480px){ .rail-ten{font-size:.82rem;max-width:9.5rem} }
 
-.khung{max-width:760px;margin:0 auto;padding-block:1.5rem 4rem;
+/* ---- khung nội dung ---- */
+.khung{max-width:780px;margin:0 auto;padding-block:1.25rem 1.5rem;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
-.nhom{background:var(--mat);border:1px solid var(--vien);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
-.nhom > header{margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--vien)}
-.nhom > header p{color:var(--chu-mo);font-size:.9rem;margin-top:.25rem}
+.nhom{background:var(--mat);border:1px solid var(--vien);border-radius:14px;
+  padding:1.15rem 1.15rem 1.3rem;margin-bottom:1rem;box-shadow:var(--bong)}
+.nhom > header{margin-bottom:1.15rem}
+.nhom > header p{color:var(--chu-mo);font-size:.92rem;margin-top:.3rem}
+@media (max-width:560px){ .nhom{padding:1rem .9rem 1.1rem;border-radius:12px} }
 
-.cau{margin-bottom:1.5rem}
-.cau:last-child{margin-bottom:0}
-.cau > label, .cau-tieu{display:block;font-family:var(--f-tieu);font-weight:600;font-size:1rem;margin-bottom:.15rem}
-.vidu{font-size:.85rem;color:var(--chu-mo);margin-bottom:.5rem}
+.cau{padding-block:1.1rem;border-top:1px solid var(--vien)}
+.nhom > header + .cau, .nhom > .cau:first-child{border-top:none;padding-top:0}
+.cau-tieu{display:block;font-family:var(--f-tieu);font-weight:600;font-size:1.02rem;
+  line-height:1.4;margin-bottom:.2rem}
+.vidu{font-size:.88rem;color:var(--chu-mo);margin-bottom:.7rem;line-height:1.55}
 .vidu b{font-weight:600;color:var(--chu)}
 
-.o{width:100%;padding:.6rem .7rem;border:1px solid var(--vien);border-radius:7px;background:var(--giay);color:var(--chu)}
-.o:focus-visible{outline:2px solid var(--muc);outline-offset:1px}
-textarea.o{min-height:4.5rem;resize:vertical;line-height:1.5}
-.hang{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+/* ---- ô nhập ---- */
+.o{width:100%;padding:.75rem .85rem;border:1.5px solid var(--vien-dam);border-radius:10px;
+  background:var(--mat);color:var(--chu);transition:border-color .15s}
+.o::placeholder{color:var(--chu-mo);opacity:.75}
+.o:hover{border-color:var(--muc)}
+.o:focus{border-color:var(--muc);outline:none;box-shadow:0 0 0 3px var(--muc-nhat)}
+textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
+.hang{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center}
 .hang > .o{flex:1 1 10rem;min-width:0}
-.so{width:7rem;text-align:right;font-variant-numeric:tabular-nums}
+.so{width:6.5rem;text-align:right;font-variant-numeric:tabular-nums}
 
-.chips{display:flex;flex-wrap:wrap;gap:.4rem}
-.chip{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .7rem;border:1px solid var(--vien);
-  border-radius:999px;background:var(--mat);color:var(--chu);font-size:.88rem;line-height:1.35;text-align:left}
-.chip:hover{border-color:var(--muc)}
-.chip[aria-pressed="true"]{background:var(--muc-nhat);border-color:var(--muc);color:var(--muc-dam);font-weight:500}
-.chip .dau{font-weight:700;opacity:.55}
-.chip[aria-pressed="true"] .dau{opacity:1}
+/* ---- ô chọn (chip) ---- */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;
+  padding:.5rem .9rem;border:1.5px solid var(--vien-dam);border-radius:10px;
+  background:var(--mat);color:var(--chu);font-size:.93rem;line-height:1.35;text-align:left;
+  transition:border-color .12s, background .12s}
+.chip:hover{border-color:var(--muc);background:var(--mat-2)}
+.chip .dau{font-weight:700;color:var(--chu-mo);font-size:.95rem;flex:0 0 auto}
+.chip[aria-pressed="true"]{background:var(--muc-nhat);border-color:var(--muc);
+  color:var(--muc-dam);font-weight:500}
+.chip[aria-pressed="true"] .dau{color:var(--muc)}
 .chip.ns[aria-pressed="true"]{background:var(--canh-nen);border-color:var(--canh);color:var(--canh)}
+.chip.ns[aria-pressed="true"] .dau{color:var(--canh)}
+@media (max-width:420px){ .chip{font-size:.9rem;padding:.5rem .75rem} }
 
-.radio{display:flex;flex-wrap:wrap;gap:.4rem}
-.radio button{padding:.4rem .9rem;border:1px solid var(--vien);border-radius:7px;background:var(--mat);color:var(--chu);font-size:.9rem}
+.radio{display:flex;flex-wrap:wrap;gap:.5rem}
+.radio button{min-height:44px;padding:.5rem 1.1rem;border:1.5px solid var(--vien-dam);
+  border-radius:10px;background:var(--mat);color:var(--chu);font-size:.95rem;transition:all .12s}
+.radio button:hover{border-color:var(--muc)}
 .radio button[aria-pressed="true"]{background:var(--muc);border-color:var(--muc);color:#fff;font-weight:500}
 
-.khongro{background:none;border:none;color:var(--muc);font-size:.82rem;text-decoration:underline;
-  text-underline-offset:3px;padding:.2rem 0;margin-top:.35rem}
+.khongro{background:none;border:none;color:var(--muc);font-size:.86rem;font-weight:500;
+  text-decoration:underline;text-underline-offset:3px;padding:.5rem 0;margin-top:.3rem}
 
+/* ---- hộp nhắc ---- */
 .bao{border-left:3px solid var(--nhan);background:var(--nhan-nen);color:var(--chu);
-  padding:.6rem .8rem;border-radius:0 7px 7px 0;font-size:.88rem;margin-top:.6rem}
+  padding:.75rem .9rem;border-radius:0 10px 10px 0;font-size:.9rem;line-height:1.55;margin-top:.7rem}
 .bao.do{border-left-color:var(--canh);background:var(--canh-nen)}
 .bao.xanh{border-left-color:var(--ok);background:var(--ok-nen)}
 .bao b{font-weight:600}
+.bao + .bao{margin-top:.55rem}
 
+/* ---- thẻ chọn việc ---- */
 .the{display:grid;gap:.6rem}
-.the button{display:block;width:100%;text-align:left;padding:.85rem 1rem;border:1px solid var(--vien);
-  border-radius:9px;background:var(--mat);color:var(--chu)}
-.the button:hover{border-color:var(--muc)}
-.the button[aria-pressed="true"]{border-color:var(--muc);background:var(--muc-nhat);box-shadow:inset 3px 0 0 var(--muc)}
-.the .t{font-family:var(--f-tieu);font-weight:600;display:block}
-.the .m{display:block;font-size:.86rem;color:var(--chu-mo);margin-top:.15rem}
+.the button{display:block;width:100%;text-align:left;padding:.95rem 1rem;
+  border:1.5px solid var(--vien-dam);border-radius:12px;background:var(--mat);color:var(--chu);
+  transition:border-color .12s, background .12s}
+.the button:hover{border-color:var(--muc);background:var(--mat-2)}
+.the .t{font-family:var(--f-tieu);font-weight:600;display:block;line-height:1.4}
+.the .m{display:block;font-size:.87rem;color:var(--chu-mo);margin-top:.25rem;line-height:1.5}
+.the button[aria-pressed="true"]{border-color:var(--muc);background:var(--muc-nhat);
+  box-shadow:inset 4px 0 0 var(--muc)}
 .the button[aria-pressed="true"] .m{color:var(--muc-dam)}
 
-.dieu{margin-top:.5rem;font-size:.85rem}
-.dieu summary{cursor:pointer;color:var(--muc);list-style:none;display:inline-flex;align-items:center;gap:.3rem}
+/* ---- giải thích thu gọn ---- */
+.dieu{margin-top:.7rem;font-size:.88rem}
+.dieu summary{cursor:pointer;color:var(--muc);list-style:none;display:inline-flex;
+  align-items:center;gap:.4rem;padding:.3rem 0;font-weight:500}
 .dieu summary::-webkit-details-marker{display:none}
-.dieu summary::before{content:"?";display:inline-grid;place-items:center;width:1.1rem;height:1.1rem;
-  border:1px solid currentColor;border-radius:50%;font-size:.72rem;font-weight:700}
-.dieu p{margin-top:.5rem;color:var(--chu-mo);padding-left:1.4rem;border-left:1px solid var(--vien)}
+.dieu summary::before{content:"?";display:inline-grid;place-items:center;width:1.2rem;height:1.2rem;
+  border:1.5px solid currentColor;border-radius:50%;font-size:.72rem;font-weight:700}
+.dieu p{margin-top:.5rem;color:var(--chu-mo);padding-left:1rem;border-left:2px solid var(--vien);line-height:1.6}
 
-.dieuhuong{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem}
-.nut{padding:.7rem 1.4rem;border-radius:8px;border:1px solid var(--muc);background:var(--muc);color:#fff;font-weight:600}
+/* ---- nút ---- */
+.nut{min-height:48px;padding:.75rem 1.5rem;border-radius:10px;border:1.5px solid var(--muc);
+  background:var(--muc);color:#fff;font-weight:600;transition:background .12s}
 .nut:hover{background:var(--muc-dam);border-color:var(--muc-dam)}
 .nut.phu{background:transparent;color:var(--muc)}
 .nut.phu:hover{background:var(--muc-nhat)}
-.nut:disabled{opacity:.45;cursor:not-allowed}
-.nut.lon{font-size:1.05rem;padding:.85rem 1.8rem}
+.nut:disabled{opacity:.5}
+.nut.lon{font-size:1.02rem}
 
-.tomtat{border:1px solid var(--vien);border-radius:9px;overflow:hidden;margin-bottom:.75rem;background:var(--mat)}
-.tomtat > h3{padding:.7rem 1rem;background:var(--muc-nhat);color:var(--muc-dam);font-size:.95rem}
-.tomtat dl{margin:0;padding:.5rem 1rem 1rem;display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr);gap:.1rem .9rem}
-.tomtat dt{font-size:.84rem;color:var(--chu-mo);padding-top:.45rem}
-.tomtat dd{margin:0;padding-top:.45rem;font-size:.92rem;min-width:0;overflow-wrap:anywhere}
-@media (max-width:560px){ .tomtat dl{grid-template-columns:1fr;gap:0} .tomtat dt{padding-top:.6rem} .tomtat dd{padding-top:.1rem} }
+/* ---- thanh điều hướng dính đáy ---- */
+.dieuhuong{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem}
+.dieuhuong.chinh{position:sticky;bottom:0;z-index:15;margin:1.25rem -16px 0;
+  padding:.8rem max(16px,env(safe-area-inset-left,0px));
+  padding-bottom:calc(.8rem + env(safe-area-inset-bottom,0px));
+  background:var(--mat);border-top:1px solid var(--vien);flex-wrap:nowrap}
+.dieuhuong.chinh .nut{flex:1 1 auto}
+.dieuhuong.chinh .nut.phu{flex:0 1 auto;min-width:6.5rem}
+@media (min-width:600px){
+  .dieuhuong.chinh{position:static;margin:1.25rem 0 0;padding:0;background:none;border-top:none}
+  .dieuhuong.chinh .nut{flex:0 0 auto}
+}
 
-.chep{width:100%;min-height:11rem;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:.8rem;
-  border:1px solid var(--vien);border-radius:7px;padding:.7rem;background:var(--giay);color:var(--chu);white-space:pre;overflow:auto}
+/* ---- xem lại ---- */
+.tomtat{border:1px solid var(--vien);border-radius:12px;overflow:hidden;margin-bottom:.8rem;
+  background:var(--mat);box-shadow:var(--bong)}
+.tomtat > h3{padding:.8rem 1rem;background:var(--mat-2);color:var(--chu);font-size:.97rem;
+  border-bottom:1px solid var(--vien)}
+.tomtat dl{margin:0;padding:.7rem 1rem 1rem;display:grid;
+  grid-template-columns:minmax(0,10.5rem) minmax(0,1fr);gap:.1rem .9rem}
+.tomtat dt{font-size:.83rem;color:var(--chu-mo);padding-top:.5rem}
+.tomtat dd{margin:0;padding-top:.5rem;font-size:.92rem;min-width:0;overflow-wrap:anywhere}
+@media (max-width:620px){
+  .tomtat dl{grid-template-columns:1fr;gap:0}
+  .tomtat dt{padding-top:.75rem;font-weight:500}
+  .tomtat dd{padding-top:.1rem}
+}
+
+.chep{width:100%;min-height:11rem;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;
+  font-size:.8rem;border:1.5px solid var(--vien-dam);border-radius:10px;padding:.8rem;
+  background:var(--mat-2);color:var(--chu);white-space:pre;overflow:auto;line-height:1.5}
 
 .bang{width:100%;border-collapse:collapse;font-size:.88rem}
-.bang th,.bang td{border:1px solid var(--vien);padding:.45rem .6rem;text-align:left;vertical-align:top}
-.bang th{background:var(--muc-nhat);color:var(--muc-dam);font-family:var(--f-tieu);font-weight:600}
-.cuon{overflow-x:auto}
+.bang th,.bang td{border:1px solid var(--vien);padding:.55rem .7rem;text-align:left;vertical-align:top}
+.bang th{background:var(--mat-2);font-family:var(--f-tieu);font-weight:600}
+.cuon{overflow-x:auto;-webkit-overflow-scrolling:touch}
 
-.chan{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--vien);font-size:.82rem;color:var(--chu-mo)}
-.chan a{color:var(--muc)}
-.lienket{background:none;border:none;color:var(--chu-mo);font-size:.82rem;text-decoration:underline;text-underline-offset:3px;padding:0}
+.chan{margin-top:2rem;padding-top:1.1rem;border-top:1px solid var(--vien);
+  font-size:.8rem;color:var(--chu-mo);line-height:1.6}
+.lienket{background:none;border:none;color:var(--muc);font-size:.88rem;font-weight:500;
+  text-decoration:underline;text-underline-offset:3px;padding:.5rem 0}
 
 @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important} }
 </style>
@@ -173,7 +240,7 @@ textarea.o{min-height:4.5rem;resize:vertical;line-height:1.5}
 /* Dán đường dẫn /exec của Google Apps Script vào đây thì trang hiện nút
    "Nộp phiếu", bấm một cái là dữ liệu chui thẳng vào Google Sheet trong
    Drive của người tổng hợp. Để trống thì trang chuyển sang cách gửi email. */
-var DIA_CHI_NOP = "";
+var DIA_CHI_NOP = "https://script.google.com/macros/s/AKfycbygZylpn8H7R9JOvg7-pnXsnnhMbBhxAqOwKNCQJpgUNB9ZEy0zdeFdZPuwl3CFLmRung/exec";
 
 /* Địa chỉ email của người tổng hợp phiếu trong khoa, dùng cho cách gửi email.
    Để trống thì trang chỉ ghi chung chung là "người tổng hợp của khoa". */
@@ -486,7 +553,7 @@ function kiemTraThat(o){
   var cu = o.parentNode && o.parentNode.querySelector(".bao.do.nhac");
   if(co && !cu){
     var b = el("div","bao do nhac");
-    b.innerHTML = "<b>Khoan đã.</b> Có vẻ bạn vừa gõ một dãy số giống số điện thoại hoặc số căn cước. " +
+    b.innerHTML = "<b>Khoan đã.</b> Hình như anh/chị/em vừa gõ một dãy số giống số điện thoại hoặc số căn cước. " +
       "Phiếu này chỉ ghi <b>loại</b> thông tin, ví dụ &ldquo;số điện thoại người bệnh&rdquo;, " +
       "tuyệt đối không ghi dữ liệu thật của bất kỳ ai.";
     o.parentNode.appendChild(b);
@@ -498,26 +565,34 @@ function kiemTraThat(o){
 /* ===================== CÁC MÀN HÌNH ===================== */
 
 function manMo(m){
-  var n = nhomMoi("Khoa Dược cần liệt kê những việc có đụng tới thông tin về con người");
-  var p1 = el("p", null, "Bệnh viện đang lập hồ sơ đánh giá tác động xử lý dữ liệu cá nhân theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15. Phòng Công nghệ thông tin cần biết khoa mình đang thu thập, lưu và chia sẻ những thông tin gì về người bệnh, người hiến, nhân viên.");
-  var p2 = el("p", null, "Bạn chỉ cần trả lời về phần việc mình phụ trách. Phần lớn câu hỏi là chọn sẵn, bấm vài cái là xong. Khoảng 10 – 15 phút cho mỗi việc.");
-  p2.style.marginTop = ".75rem";
-  n.appendChild(p1); n.appendChild(p2);
+  var n = nhomMoi("Gửi anh chị em Khoa Dược");
 
-  var b1 = el("div","bao do");
-  b1.innerHTML = "<b>Nguyên tắc quan trọng nhất:</b> chỉ mô tả <b>loại</b> thông tin, ví dụ &ldquo;họ tên, số điện thoại người bệnh&rdquo;. " +
-    "Không ghi tên thật, số điện thoại thật, kết quả xét nghiệm hay hình ảnh của bất kỳ ai.";
-  b1.style.marginTop = "1rem";
-  n.appendChild(b1);
+  var p1 = el("p", null, "Dạ, hiện tại Phòng Công nghệ thông tin đang xây dựng hệ thống DPIA của Bệnh viện.");
+  n.appendChild(p1);
 
-  var b2 = el("div","bao");
-  b2.innerHTML = "<b>Cứ khai đúng thực tế,</b> kể cả cách làm chưa đúng quy định — file chưa đặt mật khẩu, tủ chưa có khóa, nhóm chat trao đổi đơn thuốc. " +
-    "Mục đích là để Bệnh viện biết mà khắc phục, không phải để bắt lỗi ai. Khai cho &ldquo;đẹp&rdquo; thì hồ sơ sai.";
-  n.appendChild(b2);
+  var hop = el("div","bao xanh");
+  hop.innerHTML = "<b>DPIA là gì?</b> Là bản <b>đánh giá tác động xử lý dữ liệu cá nhân</b> — một hồ sơ " +
+    "liệt kê toàn bộ những việc trong Bệnh viện có đụng tới thông tin về con người: thu thập gì, " +
+    "để làm gì, cất ở đâu, ai xem được, đưa cho ai, giữ bao lâu. Từ đó Bệnh viện biết chỗ nào " +
+    "đang hở để vá lại. Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 bắt buộc phải có hồ sơ này và " +
+    "gửi cơ quan chuyên trách.";
+  hop.style.marginTop = ".9rem";
+  n.appendChild(hop);
 
-  var b3 = el("div","bao xanh");
-  b3.innerHTML = "<b>Không biết thì cứ ghi &ldquo;Không rõ&rdquo;.</b> Mỗi câu đều có sẵn nút đó. Đơn vị tư vấn sẽ hỏi lại trong buổi phỏng vấn.";
-  n.appendChild(b3);
+  var p2 = el("p", null, "Phòng Công nghệ thông tin không nắm được việc chuyên môn của từng khoa, nên phải hỏi từng người. " +
+    "Anh chị em làm giúp em thông tin này để em tổng hợp và trình ký ạ.");
+  p2.style.marginTop = ".9rem";
+  n.appendChild(p2);
+
+  var p3 = el("p", null, "Anh chị em chỉ cần trả lời về phần việc mình phụ trách. Phần lớn câu hỏi là bấm chọn có sẵn, " +
+    "khoảng 10 – 15 phút cho mỗi việc. Điền dở bỏ đó cũng được, máy tự nhớ.");
+  p3.style.marginTop = ".65rem";
+  n.appendChild(p3);
+
+  var han = el("div","bao do");
+  han.innerHTML = "<b>Hạn chót: 16h00 ngày 27/11/2026.</b>";
+  han.style.marginTop = ".9rem";
+  n.appendChild(han);
 
   var dh = el("div","dieuhuong");
   var nut = el("button","nut lon","Bắt đầu điền");
@@ -527,11 +602,25 @@ function manMo(m){
   n.appendChild(dh);
   m.appendChild(n);
 
+  var nl = nhomMoi("Lưu ý");
+  var ds = el("div");
+  [
+    ["do", "Chỉ mô tả <b>loại</b> thông tin", "Ví dụ ghi &ldquo;họ tên, số điện thoại người bệnh&rdquo;. Không ghi tên thật, số điện thoại thật, kết quả xét nghiệm hay hình ảnh của bất kỳ ai."],
+    ["", "Kê khai đúng thực tế", "Kể cả cách làm chưa đúng quy định: file chưa đặt mật khẩu, tủ chưa có khóa, nhóm chat trao đổi đơn thuốc. Mục đích là để Bệnh viện biết mà khắc phục, không phải để bắt lỗi ai. Khai cho &ldquo;đẹp&rdquo; thì hồ sơ sai."],
+    ["xanh", "Không rõ thì chọn &ldquo;Không rõ&rdquo;", "Mục nào chưa chắc thì cứ chọn, đừng đoán. Đơn vị tư vấn sẽ hỏi lại sau."]
+  ].forEach(function(x){
+    var b = el("div", "bao" + (x[0] ? " " + x[0] : ""));
+    b.innerHTML = "<b>" + x[1] + ".</b> " + x[2];
+    ds.appendChild(b);
+  });
+  nl.appendChild(ds);
+  m.appendChild(nl);
+
   var n2 = nhomMoi(null);
   n2.style.background = "transparent";
   n2.style.border = "none";
   n2.style.padding = "0";
-  var lk = el("button","lienket","Tôi là người tổng hợp của khoa — mở trang gộp phiếu");
+  var lk = el("button","lienket","Em là người tổng hợp của khoa — mở trang gộp phiếu");
   lk.type = "button";
   lk.onclick = function(){ location.hash = "tong-hop"; };
   n2.appendChild(lk);
@@ -539,17 +628,17 @@ function manMo(m){
 }
 
 function manNguoi(m){
-  var n = nhomMoi("Bạn là ai", "Để người tổng hợp biết phiếu này của ai, và hỏi lại khi cần.");
+  var n = nhomMoi("Tên của anh/chị/em", "Để em biết phiếu này của ai mà hỏi lại khi cần.");
 
   var c1 = cauMoi("Họ và tên");
-  c1.appendChild(oChu(function(){return S.nguoi.hoTen}, function(v){S.nguoi.hoTen=v}, "Ví dụ: Nguyễn Văn A"));
+  c1.appendChild(oChu(function(){return S.nguoi.hoTen}, function(v){S.nguoi.hoTen=v}, "Ví dụ: Trịnh Há Dìu"));
   n.appendChild(c1);
 
   var c2 = cauMoi("Chức danh");
   c2.appendChild(oChu(function(){return S.nguoi.chucDanh}, function(v){S.nguoi.chucDanh=v}, "Ví dụ: Dược sĩ, kỹ thuật viên, thủ kho"));
   n.appendChild(c2);
 
-  var c3 = cauMoi("Bạn làm ở bộ phận nào của khoa", "Chọn một ô gần đúng nhất.");
+  var c3 = cauMoi("Anh/chị/em làm ở bộ phận nào của khoa", "Chọn một ô gần đúng nhất.");
   c3.appendChild(oRadio(BO_PHAN, function(){return S.nguoi.boPhan}, function(v){S.nguoi.boPhan=v}));
   n.appendChild(c3);
 
@@ -558,8 +647,9 @@ function manNguoi(m){
 }
 
 function manChon(m){
-  var n = nhomMoi("Bạn phụ trách những việc nào",
-    "Chọn mọi việc bạn có tham gia, kể cả làm phụ. Mỗi việc đã chọn sẽ có một trang câu hỏi riêng ở bước sau.");
+  var n = nhomMoi("Anh/chị/em phụ trách những việc nào",
+    "Chọn được nhiều việc cùng lúc — cứ chọn hết những việc mình đang làm, kể cả làm phụ. " +
+    "Mỗi việc đã chọn sẽ có một trang câu hỏi riêng ở bước sau.");
 
   var w = el("div","the");
   VIEC.forEach(function(v){
@@ -582,10 +672,10 @@ function manChon(m){
   n.appendChild(w);
 
   var ck = el("div","cau");
-  ck.style.marginTop = "1.25rem";
-  ck.appendChild(el("div","cau-tieu","Còn việc nào khác không có trong danh sách?"));
+  ck.appendChild(el("div","cau-tieu","Việc nào không có trong danh sách thì anh/chị/em điền thêm"));
   var vd = el("div","vidu");
-  vd.innerHTML = "Ví dụ: <b>giữ sổ khách đến làm việc tại khoa</b>, <b>quản lý đề tài nghiên cứu có dùng dữ liệu người bệnh</b>.";
+  vd.innerHTML = "Chỉ thêm việc <b>có liên quan tới thông tin người bệnh, người hiến hoặc nhân viên</b>. " +
+    "Ví dụ: <b>giữ sổ khách đến làm việc tại khoa</b>, <b>đề tài nghiên cứu có dùng dữ liệu người bệnh</b>.";
   ck.appendChild(vd);
   var hang = el("div","hang");
   var o = el("input","o"); o.type = "text"; o.placeholder = "Tên việc, ví dụ: Theo dõi hạn dùng thuốc tủ trực";
@@ -634,7 +724,7 @@ function manChon(m){
 }
 function demChu(){
   if(!S.chon.length) return "Chưa chọn việc nào.";
-  return "Đã chọn " + S.chon.length + " việc — bạn sẽ điền " + S.chon.length + " trang câu hỏi.";
+  return "Đã chọn " + S.chon.length + " việc — anh/chị/em sẽ điền " + S.chon.length + " trang câu hỏi.";
 }
 
 function manPhieu(m, id, thuTu){
@@ -656,7 +746,7 @@ function manPhieu(m, id, thuTu){
   m.appendChild(h);
 
   /* --- A --- */
-  var A = nhomMoi("Việc này làm để làm gì", "Đã điền sẵn, bạn sửa lại cho đúng với khoa mình nếu cần.");
+  var A = nhomMoi("Việc này làm để làm gì", "Em điền sẵn rồi, anh/chị/em sửa lại cho đúng với khoa mình nếu cần.");
   var a1 = cauMoi("Tên việc");
   a1.appendChild(oChu(function(){return p.ten || tenViec}, function(v){p.ten=v}));
   A.appendChild(a1);
@@ -691,7 +781,7 @@ function manPhieu(m, id, thuTu){
   b3.appendChild(giaiThich("Trẻ em và người không tự thực hiện được quyền của mình phải do người đại diện quyết định thay, nên Bệnh viện cần biết việc nào có nhóm này."));
   B.appendChild(b3);
 
-  var b4 = cauMoi("Việc này ghi lại những thông tin nào", "Bấm vào mọi ô có xuất hiện trong sổ, phiếu, file hay phần mềm bạn dùng.");
+  var b4 = cauMoi("Việc này ghi lại những thông tin nào", "Bấm vào mọi ô có xuất hiện trong sổ, phiếu, file hay phần mềm anh/chị/em dùng.");
   var hienNS = el("div");
   function veNS(){
     hienNS.innerHTML = "";
@@ -700,11 +790,11 @@ function manPhieu(m, id, thuTu){
       var b = el("div","bao do");
       var ds = d.map(function(x){ return "điểm " + x + " – " + NHAY_CAM[x].toLowerCase(); }).join("; ");
       b.innerHTML = "<b>Việc này có dữ liệu nhạy cảm:</b> " + ds +
-        ". Hệ thống tự nhận ra từ các ô bạn đã chọn, bạn không phải tra bảng.";
+        ". Hệ thống tự nhận ra từ các ô đã chọn, anh/chị/em không phải tra bảng.";
       hienNS.appendChild(b);
     } else if(p.truong.length){
       var b2x = el("div","bao xanh");
-      b2x.innerHTML = "<b>Chưa thấy dữ liệu nhạy cảm</b> trong các ô bạn chọn. Nếu việc này có đụng tới sức khỏe, xét nghiệm hay hình ảnh người bệnh thì chọn thêm cho đủ.";
+      b2x.innerHTML = "<b>Chưa thấy dữ liệu nhạy cảm</b> trong các ô đã chọn. Nếu việc này có đụng tới sức khỏe, xét nghiệm hay hình ảnh người bệnh thì chọn thêm cho đủ.";
       hienNS.appendChild(b2x);
     }
   }
@@ -772,7 +862,7 @@ function manPhieu(m, id, thuTu){
   cbm.style.marginTop = ".5rem";
   cbm.appendChild(oChu(function(){return p.bieuMau}, function(v){p.bieuMau=v}, "Nếu có biểu mẫu, ghi tên biểu mẫu và nơi lưu phiếu đã ký"));
   c6.appendChild(cbm);
-  c6.appendChild(giaiThich("Bệnh viện phải chứng minh được căn cứ xử lý dữ liệu. Nhiều việc trong bệnh viện không cần xin đồng ý vì pháp luật đã quy định phải làm — bạn không phải tự kết luận, chỉ cần ghi thực tế đang làm thế nào."));
+  c6.appendChild(giaiThich("Bệnh viện phải chứng minh được căn cứ xử lý dữ liệu. Nhiều việc trong bệnh viện không cần xin đồng ý vì pháp luật đã quy định phải làm — anh/chị/em không phải tự kết luận, chỉ cần ghi thực tế đang làm thế nào."));
   C.appendChild(c6);
   m.appendChild(C);
 
@@ -895,16 +985,16 @@ function veNop(v){
   if(DIA_CHI_NOP){
     if(daNop){
       var ok = el("div","bao xanh");
-      ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của bạn đã vào bảng tổng hợp của khoa. " +
+      ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. " +
         "Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng.";
       v.appendChild(ok);
     } else {
       var gt = el("div","bao xanh");
-      gt.innerHTML = "<b>Bạn điền xong rồi.</b> Bấm Nộp phiếu là hết việc, không phải gửi email cho ai.";
+      gt.innerHTML = "<b>Xong rồi ạ.</b> Bấm Nộp phiếu là hết việc, không phải gửi email cho ai.";
       v.appendChild(gt);
     }
 
-    var cm = cauMoi("Mã khoa", "Người tổng hợp của khoa đã báo mã này. Gõ sai thì không nộp được.");
+    var cm = cauMoi("Mã khoa", "Mã chung của khoa, em đã báo. Gõ sai thì không nộp được.");
     var om = el("input","o");
     om.type = "text";
     om.placeholder = "Ví dụ: DUOC2026";
@@ -935,7 +1025,7 @@ function veNop(v){
 
   /* Cách 2: chưa có nơi nhận thì gửi email */
   var c = el("div","bao xanh");
-  c.innerHTML = "<b>Bạn điền xong rồi.</b> Việc cuối cùng là gửi khối nội dung bên dưới cho người tổng hợp " +
+  c.innerHTML = "<b>Xong rồi ạ.</b> Việc cuối cùng là gửi khối nội dung bên dưới cho người tổng hợp " +
     "của khoa qua email. Mất đúng một lần dán.";
   v.appendChild(c);
 
@@ -967,7 +1057,7 @@ function veNop(v){
 
   moChep(v);
 
-  var g = el("p", null, "Gửi xong là hết việc của bạn. Bản nháp vẫn nằm trên máy này, nếu cần sửa thì quay lại sửa rồi gửi bản mới.");
+  var g = el("p", null, "Gửi xong là hết việc ạ. Bản nháp vẫn nằm trên máy này, nếu cần sửa thì quay lại sửa rồi gửi bản mới.");
   g.style.color = "var(--chu-mo)";
   g.style.fontSize = ".85rem";
   g.style.marginTop = ".75rem";
@@ -977,7 +1067,7 @@ function veNop(v){
 /* Gửi phiếu thẳng tới Google Apps Script */
 function nop(nut, vung, oMa){
   var ma = ((oMa && oMa.value) || "").trim();
-  if(!ma){ loiNop(vung, "Bạn chưa gõ mã khoa.", false); return; }
+  if(!ma){ loiNop(vung, "Anh/chị/em chưa gõ mã khoa.", false); return; }
   try{ localStorage.setItem(KHOA_MA, ma); }catch(e){}
 
   nut.disabled = true;
@@ -1009,7 +1099,7 @@ function loiNop(vung, vi, moChepLuon){
   if(cu) cu.remove();
   var b = el("div","bao do loiNop");
   b.innerHTML = "<b>Chưa nộp được.</b> " + vi +
-    (moChepLuon ? " Bạn bấm <b>Hoặc chép để gửi email</b>, dán vào email gửi người tổng hợp của khoa là xong — không mất công điền lại." : "");
+    (moChepLuon ? " Anh/chị/em bấm <b>Hoặc chép để gửi email</b>, dán vào email gửi người tổng hợp của khoa là xong — không mất công điền lại." : "");
   vung.appendChild(b);
   if(moChepLuon) moChep(vung);
 }
@@ -1143,7 +1233,7 @@ function manTongHop(m){
         })["catch"](function(){ baoKho("Không đọc được bảng tổng hợp."); });
     };
 
-    var cq = cauMoi("Mã quản trị", "Mã bạn đặt trong Code.gs. Chỉ người tổng hợp giữ mã này.");
+    var cq = cauMoi("Mã quản trị", "Mã đặt trong Code.gs. Chỉ người tổng hợp giữ mã này.");
     var oq = el("input","o");
     oq.type = "password";
     oq.style.maxWidth = "16rem";
@@ -1315,7 +1405,7 @@ function laNhayCam(t){
 /* ===================== KHUNG ĐIỀU HƯỚNG ===================== */
 
 function dieuHuong(lui, toi, kiemTra, loi, nhanToi){
-  var w = el("div","dieuhuong");
+  var w = el("div","dieuhuong chinh");
   if(lui >= 0){
     var b1 = el("button","nut phu","Quay lại");
     b1.type = "button";
