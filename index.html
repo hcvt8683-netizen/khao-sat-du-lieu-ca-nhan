@@ -228,8 +228,42 @@ textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
 
 .chan{margin-top:2rem;padding-top:1.1rem;border-top:1px solid var(--vien);
   font-size:.8rem;color:var(--chu-mo);line-height:1.6}
-.loi-cam-on{font-family:var(--f-tieu);font-weight:600;font-size:1.02rem;color:var(--ok);
-  margin-top:.9rem;text-align:center;padding:.6rem 0}
+/* ---- sơ đồ 3 bước ở màn hình mở đầu ---- */
+.lotrinh{display:grid;gap:.1rem;margin-top:1.1rem;border:1px solid var(--vien);
+  border-radius:12px;overflow:hidden;background:var(--vien)}
+.lotrinh > div{display:flex;gap:.8rem;align-items:flex-start;background:var(--mat);padding:.85rem 1rem}
+.lotrinh .so{flex:0 0 1.75rem;height:1.75rem;width:1.75rem;border-radius:50%;
+  background:var(--muc-nhat);color:var(--muc);font-family:var(--f-tieu);font-weight:700;
+  font-size:.88rem;display:grid;place-items:center;text-align:center}
+.lotrinh .noi{min-width:0}
+.lotrinh .noi b{display:block;font-family:var(--f-tieu);font-weight:600;font-size:.97rem;line-height:1.4}
+.lotrinh .noi span{display:block;font-size:.86rem;color:var(--chu-mo);line-height:1.5;margin-top:.1rem}
+
+/* ---- tên bước trên thanh tiến độ ---- */
+.b-ten{color:var(--chu-mo)}
+@media (max-width:620px){ .b-ten{display:none} }
+
+/* ---- số thứ tự của nhóm câu hỏi ---- */
+.nhom > header{display:flex;gap:.7rem;align-items:flex-start}
+.nhom > header .stt{flex:0 0 1.6rem;height:1.6rem;width:1.6rem;border-radius:7px;
+  background:var(--muc);color:#fff;font-family:var(--f-tieu);font-weight:700;font-size:.82rem;
+  display:grid;place-items:center;margin-top:.12rem}
+.nhom > header .chu{min-width:0}
+
+/* ---- chuyển bước ---- */
+@keyframes hien-len{from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:none}}
+.dang-hien{animation:hien-len .22s ease-out}
+
+/* ---- màn hình nộp xong ---- */
+.xong-roi{text-align:center;padding:1.5rem .5rem .5rem}
+.xong-roi .dau-tich{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;
+  background:var(--ok-nen);display:grid;place-items:center}
+.xong-roi .dau-tich svg{width:32px;height:32px;stroke:var(--ok);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.xong-roi h2{color:var(--ok)}
+.xong-roi p{color:var(--chu-mo);margin-top:.5rem;font-size:.95rem;line-height:1.6}
+.loi-cam-on{font-family:var(--f-tieu);font-weight:600;font-size:1.05rem;color:var(--chu);
+  margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--vien)}
 
 .lienket{display:inline-flex;align-items:center;min-height:44px;background:none;border:none;
   color:var(--muc);font-size:.88rem;font-weight:500;text-align:left;
@@ -421,11 +455,24 @@ function baoLuu(){
   clearTimeout(hienLuu);
   hienLuu = setTimeout(veTrangThai, 4000);
 }
-function veTrangThai(){
-  var el = document.getElementById("trangthai");
-  if(!el) return;
+function tenBuoc(i){
   var b = cacBuoc();
-  el.textContent = S.buoc === 0 ? "Chưa bắt đầu" : ("Bước " + (S.buoc+1) + "/" + b.length);
+  var c = b[Math.min(i, b.length-1)];
+  if(c.k === "mo")    return "Giới thiệu";
+  if(c.k === "nguoi") return "Anh chị em là ai";
+  if(c.k === "chon")  return "Chọn việc";
+  if(c.k === "xong")  return "Xem lại và nộp";
+  return "Việc " + (S.chon.indexOf(c.id) + 1) + " trong " + S.chon.length;
+}
+
+function veTrangThai(){
+  var e = document.getElementById("trangthai");
+  if(!e) return;
+  var b = cacBuoc();
+  if(S.buoc === 0){ e.textContent = "Chưa bắt đầu"; return; }
+  e.innerHTML = "";
+  e.appendChild(el("span", null, "Bước " + (S.buoc+1) + "/" + b.length));
+  e.appendChild(el("span","b-ten", " · " + tenBuoc(S.buoc)));
 }
 
 /* ===================== PHIẾU ===================== */
@@ -492,12 +539,15 @@ function el(tag, cls, txt){
   if(txt != null) e.textContent = txt;
   return e;
 }
-function nhomMoi(tieu, phu){
+function nhomMoi(tieu, phu, stt){
   var n = el("section","nhom");
   if(tieu){
     var h = el("header");
-    h.appendChild(el("h2", null, tieu));
-    if(phu) h.appendChild(el("p", null, phu));
+    if(stt) h.appendChild(el("span","stt", String(stt)));
+    var c = el("div","chu");
+    c.appendChild(el("h2", null, tieu));
+    if(phu) c.appendChild(el("p", null, phu));
+    h.appendChild(c);
     n.appendChild(h);
   }
   return n;
@@ -624,6 +674,22 @@ function manMo(m){
     "Phần lớn câu hỏi là bấm chọn có sẵn, anh chị em hoàn thành giúp em.");
   p2.style.marginTop = ".9rem";
   n.appendChild(p2);
+
+  var lt = el("div","lotrinh");
+  [
+    ["1", "Cho em biết anh/chị/em là ai", "Họ tên, chức danh, làm ở bộ phận nào"],
+    ["2", "Chọn việc mình phụ trách", "Chọn được nhiều việc cùng lúc"],
+    ["3", "Trả lời câu hỏi rồi bấm nộp", "Phần lớn là bấm chọn có sẵn"]
+  ].forEach(function(x){
+    var d = el("div");
+    d.appendChild(el("span","so", x[0]));
+    var k = el("div","noi");
+    k.appendChild(el("b", null, x[1]));
+    k.appendChild(el("span", null, x[2]));
+    d.appendChild(k);
+    lt.appendChild(d);
+  });
+  n.appendChild(lt);
 
   var han = el("div","bao do");
   han.innerHTML = "<b>Hạn chót: 16h00 ngày 27/11/2026.</b>";
@@ -781,7 +847,7 @@ function manPhieu(m, id, thuTu){
   m.appendChild(h);
 
   /* --- A --- */
-  var A = nhomMoi("Việc này làm để làm gì", "Em điền sẵn rồi, anh/chị/em sửa lại cho đúng với khoa mình nếu cần.");
+  var A = nhomMoi("Việc này làm để làm gì", "Em điền sẵn rồi, anh/chị/em sửa lại cho đúng với khoa mình nếu cần.", 1);
   var a1 = cauMoi("Tên việc");
   a1.appendChild(oChu(function(){return p.ten || tenViec}, function(v){p.ten=v}));
   A.appendChild(a1);
@@ -791,7 +857,7 @@ function manPhieu(m, id, thuTu){
   m.appendChild(A);
 
   /* --- B --- */
-  var B = nhomMoi("Thông tin của ai, gồm những gì");
+  var B = nhomMoi("Thông tin của ai, gồm những gì", null, 2);
 
   var b1 = cauMoi("Việc này đụng tới thông tin của những ai", "Chọn nhóm người <b>có thông tin bị xử lý</b>, không phải người giữ thông tin.");
   b1.appendChild(oChips(CHU_DL, p.chuDL));
@@ -844,7 +910,7 @@ function manPhieu(m, id, thuTu){
   m.appendChild(B);
 
   /* --- C --- */
-  var C = nhomMoi("Giữ ở đâu, ai xem được, đưa cho ai");
+  var C = nhomMoi("Giữ ở đâu, ai xem được, đưa cho ai", null, 3);
 
   var c1 = cauMoi("Thông tin được giữ ở những đâu", "Chọn <b>mọi nơi</b> có bản sao, kể cả sổ tay, file Excel và nhóm chat.");
   var hienRui = el("div");
@@ -902,7 +968,7 @@ function manPhieu(m, id, thuTu){
   m.appendChild(C);
 
   /* --- D --- */
-  var D = nhomMoi("Giữ bao lâu và bảo vệ thế nào");
+  var D = nhomMoi("Giữ bao lâu và bảo vệ thế nào", null, 4);
 
   var d1 = cauMoi("Giữ trong bao lâu rồi mới bỏ");
   d1.appendChild(oRadio(["Theo quy định đã có","Chưa có quy định","Không rõ"],
@@ -1019,13 +1085,24 @@ function veNop(v){
   /* Cách 1: có nơi nhận trên Google thì nộp thẳng, một nút là xong */
   if(DIA_CHI_NOP){
     if(daNop){
-      var ok = el("div","bao xanh");
-      ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. " +
-        "Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng.";
-      v.appendChild(ok);
+      var xr = el("div","xong-roi");
+      var vong = el("div","dau-tich");
+      vong.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12.5 9.5 18 20 6.5"/></svg>';
+      xr.appendChild(vong);
+      xr.appendChild(el("h2", null, "Đã nộp xong"));
+      xr.appendChild(el("p", null,
+        "Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng."));
+      xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc anh chị buổi chiều vui vẻ."));
+      v.appendChild(xr);
 
-      var cam = el("p","loi-cam-on","Em cảm ơn, chúc anh chị buổi chiều vui vẻ.");
-      v.appendChild(cam);
+      var hl = el("div","dieuhuong");
+      hl.style.justifyContent = "center";
+      var nl = el("button","nut phu","Sửa rồi nộp lại");
+      nl.type = "button";
+      nl.onclick = function(){ nop(nl, v); };
+      hl.appendChild(nl);
+      v.appendChild(hl);
+      return;
     } else {
       var gt = el("div","bao xanh");
       gt.innerHTML = "<b>Xong rồi ạ.</b> Bấm Nộp phiếu là hết việc, không phải gõ mã hay gửi email cho ai.";
@@ -1476,6 +1553,9 @@ function ve(){
   else manXong(m);
   capNhatThanh();
   chan(m);
+  m.classList.remove("dang-hien");
+  void m.offsetWidth;
+  m.classList.add("dang-hien");
 }
 function chan(m){
   var c = el("div","chan");
