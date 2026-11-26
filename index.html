@@ -117,6 +117,17 @@ textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
 
 /* ---- ô chọn (chip) ---- */
 .chips{display:flex;flex-wrap:wrap;gap:.5rem}
+/* Lưới: mỗi ô một cột đều nhau, không còn so le rách mép */
+.chips.luoi{display:grid;grid-template-columns:1fr;gap:.45rem}
+@media (min-width:540px){ .chips.luoi{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (min-width:880px){ .chips.luoi{grid-template-columns:repeat(3,minmax(0,1fr))} }
+.chips.luoi .chip{width:100%;justify-content:flex-start}
+
+.khoi-chip + .khoi-chip{margin-top:1rem}
+.nhan-nhom{font-family:var(--f-tieu);font-size:.76rem;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--chu-mo);margin-bottom:.45rem;
+  padding-bottom:.3rem;border-bottom:1px solid var(--vien)}
+
 .chip{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;
   padding:.5rem .9rem;border:1.5px solid var(--vien-dam);border-radius:10px;
   background:var(--mat);color:var(--chu);font-size:.93rem;line-height:1.35;text-align:left;
@@ -270,34 +281,46 @@ var NHAY_CAM = {
 
 /* Mỗi ô tick là một loại thông tin; ô nào thuộc nhóm nhạy cảm thì mang sẵn điểm a..m
    để người điền không phải tra bảng. */
-var TRUONG = [
-  {t:"Họ tên"},
-  {t:"Năm sinh hoặc ngày sinh"},
-  {t:"Giới tính"},
-  {t:"Địa chỉ"},
-  {t:"Số điện thoại"},
-  {t:"Mã người bệnh"},
-  {t:"Số thẻ bảo hiểm y tế"},
-  {t:"Số căn cước, số định danh cá nhân"},
-  {t:"Ảnh chụp hoặc bản photo thẻ căn cước", ns:"i"},
-  {t:"Chẩn đoán bệnh", ns:"d"},
-  {t:"Đơn thuốc, y lệnh, liều dùng", ns:"d"},
-  {t:"Kết quả xét nghiệm", ns:"d"},
-  {t:"Cân nặng, chiều cao dùng để tính liều", ns:"d"},
-  {t:"Tiền sử dị ứng, phản ứng có hại của thuốc", ns:"d"},
-  {t:"Giấy khám sức khỏe, giấy nghỉ ốm", ns:"d"},
-  {t:"Kết quả xét nghiệm gen, di truyền", ns:"đ"},
-  {t:"Vân tay hoặc khuôn mặt dùng chấm công", ns:"đ"},
-  {t:"Dân tộc", ns:"a"},
-  {t:"Tôn giáo", ns:"b"},
-  {t:"Hoàn cảnh gia đình, kinh tế", ns:"c"},
-  {t:"Tiền sử hành vi nguy cơ", ns:"e"},
-  {t:"Người bệnh là bị can, phạm nhân", ns:"g"},
-  {t:"Số thẻ, giao dịch ngân hàng, thu viện phí", ns:"k"},
-  {t:"Họ tên, chức danh, chữ ký của nhân viên"},
-  {t:"Bằng cấp, chứng chỉ hành nghề"},
-  {t:"Lịch trực, bảng chấm công"}
+var TRUONG_NHOM = [
+  {ten:"Thông tin định danh", muc:[
+    {t:"Họ tên"},
+    {t:"Năm sinh hoặc ngày sinh"},
+    {t:"Giới tính"},
+    {t:"Địa chỉ"},
+    {t:"Số điện thoại"},
+    {t:"Mã người bệnh"},
+    {t:"Số thẻ bảo hiểm y tế"},
+    {t:"Số căn cước, số định danh cá nhân"}
+  ]},
+  {ten:"Sức khỏe và điều trị", muc:[
+    {t:"Chẩn đoán bệnh", ns:"d"},
+    {t:"Đơn thuốc, y lệnh, liều dùng", ns:"d"},
+    {t:"Kết quả xét nghiệm", ns:"d"},
+    {t:"Cân nặng, chiều cao dùng để tính liều", ns:"d"},
+    {t:"Tiền sử dị ứng, phản ứng có hại của thuốc", ns:"d"},
+    {t:"Giấy khám sức khỏe, giấy nghỉ ốm", ns:"d"}
+  ]},
+  {ten:"Thông tin riêng tư khác", muc:[
+    {t:"Ảnh chụp hoặc bản photo thẻ căn cước", ns:"i"},
+    {t:"Kết quả xét nghiệm gen, di truyền", ns:"đ"},
+    {t:"Vân tay hoặc khuôn mặt dùng chấm công", ns:"đ"},
+    {t:"Dân tộc", ns:"a"},
+    {t:"Tôn giáo", ns:"b"},
+    {t:"Hoàn cảnh gia đình, kinh tế", ns:"c"},
+    {t:"Tiền sử hành vi nguy cơ", ns:"e"},
+    {t:"Người bệnh là bị can, phạm nhân", ns:"g"},
+    {t:"Số thẻ, giao dịch ngân hàng, thu viện phí", ns:"k"}
+  ]},
+  {ten:"Thông tin của nhân viên, học viên", muc:[
+    {t:"Họ tên, chức danh, chữ ký của nhân viên"},
+    {t:"Bằng cấp, chứng chỉ hành nghề"},
+    {t:"Lịch trực, bảng chấm công"}
+  ]}
 ];
+
+/* Danh sách phẳng, dùng để tra điểm nhạy cảm */
+var TRUONG = [];
+TRUONG_NHOM.forEach(function(g){ g.muc.forEach(function(m){ TRUONG.push(m); }); });
 
 var NOI_LUU = ["Phần mềm HIS của Bệnh viện","Phần mềm kho dược hoặc nhà thuốc","File Excel, Word trên máy tính",
   "Thư mục dùng chung trên mạng nội bộ","Sổ ghi tay","Tủ, kệ hồ sơ giấy","Nhóm trò chuyện trên ứng dụng nhắn tin",
@@ -490,7 +513,8 @@ function giaiThich(noiDung){
   return d;
 }
 function oChips(ds, daChon, doi, lopNS){
-  var w = el("div","chips");
+  /* Danh sách dài xếp lưới cho thẳng hàng; danh sách ngắn để chạy tự nhiên */
+  var w = el("div", "chips" + (ds.length > 5 ? " luoi" : ""));
   ds.forEach(function(m){
     var nhan = (typeof m === "string") ? m : m.t;
     var ns   = (typeof m === "string") ? null : m.ns;
@@ -512,6 +536,18 @@ function oChips(ds, daChon, doi, lopNS){
   });
   return w;
 }
+/* Danh sách dài thì chia nhóm có tiêu đề nhỏ, xếp lưới cho thẳng hàng */
+function oChipsNhom(nhom, daChon, doi, lopNS){
+  var w = el("div");
+  nhom.forEach(function(g){
+    var k = el("div","khoi-chip");
+    k.appendChild(el("div","nhan-nhom", g.ten));
+    k.appendChild(oChips(g.muc, daChon, doi, lopNS));
+    w.appendChild(k);
+  });
+  return w;
+}
+
 function oRadio(ds, giaTri, dat){
   var w = el("div","radio");
   ds.forEach(function(m){
@@ -569,27 +605,19 @@ function kiemTraThat(o){
 function manMo(m){
   var n = nhomMoi("Gửi anh chị em Khoa Dược");
 
-  var p1 = el("p", null, "Dạ, hiện tại Phòng Công nghệ thông tin đang xây dựng hệ thống DPIA của Bệnh viện.");
+  var p1 = el("p", null, "Dạ, Phòng Công nghệ thông tin đang khảo sát thông tin để xây dựng hệ thống DPIA của Bệnh viện.");
   n.appendChild(p1);
 
   var hop = el("div","bao xanh");
-  hop.innerHTML = "<b>DPIA là gì?</b> Là bản <b>đánh giá tác động xử lý dữ liệu cá nhân</b> — một hồ sơ " +
-    "liệt kê toàn bộ những việc trong Bệnh viện có đụng tới thông tin về con người: thu thập gì, " +
-    "để làm gì, cất ở đâu, ai xem được, đưa cho ai, giữ bao lâu. Từ đó Bệnh viện biết chỗ nào " +
-    "đang hở để vá lại. Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 bắt buộc phải có hồ sơ này và " +
-    "gửi cơ quan chuyên trách.";
+  hop.innerHTML = "<b>DPIA là gì?</b> Là hồ sơ liệt kê những việc trong Bệnh viện có đụng tới thông tin " +
+    "về con người — thu thập gì, cất ở đâu, ai xem được. Luật số 91/2025/QH15 bắt buộc phải có.";
   hop.style.marginTop = ".9rem";
   n.appendChild(hop);
 
-  var p2 = el("p", null, "Phòng Công nghệ thông tin không nắm được việc chuyên môn của từng khoa, nên phải hỏi từng người. " +
-    "Anh chị em làm giúp em thông tin này để em tổng hợp và trình ký ạ.");
+  var p2 = el("p", null, "Anh/chị/em làm giúp giùm em bảng này để em tổng hợp và trình ký ạ. " +
+    "Phần lớn câu hỏi là bấm chọn có sẵn, anh chị em hoàn thành giúp em.");
   p2.style.marginTop = ".9rem";
   n.appendChild(p2);
-
-  var p3 = el("p", null, "Anh chị em chỉ cần trả lời về phần việc mình phụ trách. Phần lớn câu hỏi là bấm chọn có sẵn, " +
-    "khoảng 10 – 15 phút cho mỗi việc. Điền dở bỏ đó cũng được, máy tự nhớ.");
-  p3.style.marginTop = ".65rem";
-  n.appendChild(p3);
 
   var han = el("div","bao do");
   han.innerHTML = "<b>Hạn chót: 16h00 ngày 27/11/2026.</b>";
@@ -608,7 +636,6 @@ function manMo(m){
   var ds = el("div");
   [
     ["do", "Chỉ mô tả <b>loại</b> thông tin", "Ví dụ ghi &ldquo;họ tên, số điện thoại người bệnh&rdquo;. Không ghi tên thật, số điện thoại thật, kết quả xét nghiệm hay hình ảnh của bất kỳ ai."],
-    ["", "Kê khai đúng thực tế", "Kể cả cách làm chưa đúng quy định: file chưa đặt mật khẩu, tủ chưa có khóa, nhóm chat trao đổi đơn thuốc. Mục đích là để Bệnh viện biết mà khắc phục, không phải để bắt lỗi ai. Khai cho &ldquo;đẹp&rdquo; thì hồ sơ sai."],
     ["xanh", "Không rõ thì chọn &ldquo;Không rõ&rdquo;", "Mục nào chưa chắc thì cứ chọn, đừng đoán. Đơn vị tư vấn sẽ hỏi lại sau."]
   ].forEach(function(x){
     var b = el("div", "bao" + (x[0] ? " " + x[0] : ""));
@@ -800,7 +827,7 @@ function manPhieu(m, id, thuTu){
       hienNS.appendChild(b2x);
     }
   }
-  b4.appendChild(oChips(TRUONG, p.truong, veNS, true));
+  b4.appendChild(oChipsNhom(TRUONG_NHOM, p.truong, veNS, true));
   b4.appendChild(hienNS);
   veNS();
   B.appendChild(b4);
