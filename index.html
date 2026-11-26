@@ -228,6 +228,9 @@ textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
 
 .chan{margin-top:2rem;padding-top:1.1rem;border-top:1px solid var(--vien);
   font-size:.8rem;color:var(--chu-mo);line-height:1.6}
+.loi-cam-on{font-family:var(--f-tieu);font-weight:600;font-size:1.02rem;color:var(--ok);
+  margin-top:.9rem;text-align:center;padding:.6rem 0}
+
 .lienket{display:inline-flex;align-items:center;min-height:44px;background:none;border:none;
   color:var(--muc);font-size:.88rem;font-weight:500;text-align:left;
   text-decoration:underline;text-underline-offset:3px;padding:.2rem 0}
@@ -260,7 +263,10 @@ var DIA_CHI_NOP = "https://script.google.com/macros/s/AKfycbygZylpn8H7R9JOvg7-pn
 var EMAIL_NHAN = "";
 
 var daNop = false;
-var KHOA_MA = "dpia-khoaduoc-ma";
+
+/* Mã khoa gửi kèm tự động, người điền không phải gõ. Đây không phải mật khẩu
+   — nó chỉ chặn máy dò tình cờ gửi rác vào bảng tổng hợp. */
+var MA_KHOA = "DUOC2026";
 
 /* ===================== DỮ LIỆU NỀN ===================== */
 
@@ -610,7 +616,7 @@ function manMo(m){
 
   var hop = el("div","bao xanh");
   hop.innerHTML = "<b>DPIA là gì?</b> Là hồ sơ liệt kê những việc trong Bệnh viện có đụng tới thông tin " +
-    "về con người — thu thập gì, cất ở đâu, ai xem được. Luật số 91/2025/QH15 bắt buộc phải có.";
+    "về con người — thu thập gì, cất ở đâu, ai xem được. Luật số 91/2025/QH15 quy định xây dựng dữ liệu này.";
   hop.style.marginTop = ".9rem";
   n.appendChild(hop);
 
@@ -1017,26 +1023,19 @@ function veNop(v){
       ok.innerHTML = "<b>Đã nộp xong.</b> Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. " +
         "Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng.";
       v.appendChild(ok);
+
+      var cam = el("p","loi-cam-on","Em cảm ơn, chúc anh chị buổi chiều vui vẻ.");
+      v.appendChild(cam);
     } else {
       var gt = el("div","bao xanh");
-      gt.innerHTML = "<b>Xong rồi ạ.</b> Bấm Nộp phiếu là hết việc, không phải gửi email cho ai.";
+      gt.innerHTML = "<b>Xong rồi ạ.</b> Bấm Nộp phiếu là hết việc, không phải gõ mã hay gửi email cho ai.";
       v.appendChild(gt);
     }
-
-    var cm = cauMoi("Mã khoa", "Mã chung của khoa, em đã báo. Gõ sai thì không nộp được.");
-    var om = el("input","o");
-    om.type = "text";
-    om.placeholder = "Ví dụ: DUOC2026";
-    om.autocapitalize = "characters";
-    try{ om.value = localStorage.getItem(KHOA_MA) || ""; }catch(e){}
-    om.style.maxWidth = "16rem";
-    cm.appendChild(om);
-    v.appendChild(cm);
 
     var hn = el("div","dieuhuong");
     var nNop = el("button","nut lon", daNop ? "Nộp lại bản mới" : "Nộp phiếu");
     nNop.type = "button";
-    nNop.onclick = function(){ nop(nNop, v, om); };
+    nNop.onclick = function(){ nop(nNop, v); };
     hn.appendChild(nNop);
     var nChep = el("button","nut phu","Hoặc chép để gửi email");
     nChep.type = "button";
@@ -1094,15 +1093,11 @@ function veNop(v){
 }
 
 /* Gửi phiếu thẳng tới Google Apps Script */
-function nop(nut, vung, oMa){
-  var ma = ((oMa && oMa.value) || "").trim();
-  if(!ma){ loiNop(vung, "Anh/chị/em chưa gõ mã khoa.", false); return; }
-  try{ localStorage.setItem(KHOA_MA, ma); }catch(e){}
-
+function nop(nut, vung){
   nut.disabled = true;
   nut.textContent = "Đang nộp...";
   var than = new URLSearchParams();
-  than.set("ma", ma);
+  than.set("ma", MA_KHOA);
   than.set("payload", JSON.stringify(goiDuLieu()));
 
   fetch(DIA_CHI_NOP, {method:"POST", body: than})
@@ -1111,11 +1106,7 @@ function nop(nut, vung, oMa){
       nut.disabled = false;
       if(k && k.ok){ daNop = true; veNop(vung); window.scrollTo({top:0}); return; }
       nut.textContent = "Nộp phiếu";
-      if(k && k.loi === "ma_sai"){
-        loiNop(vung, "Mã khoa không đúng. Hỏi lại người tổng hợp của khoa rồi gõ lại.", false);
-      } else {
-        loiNop(vung, "Nơi nhận phiếu báo lỗi, chưa lưu được.", true);
-      }
+      loiNop(vung, "Nơi nhận phiếu báo lỗi, chưa lưu được.", true);
     })["catch"](function(){
       nut.disabled = false;
       nut.textContent = "Nộp phiếu";
