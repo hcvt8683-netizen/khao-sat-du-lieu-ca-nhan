@@ -696,19 +696,14 @@ function kiemTraThat(o){
 /* ===================== CÁC MÀN HÌNH ===================== */
 
 function manMo(m){
-  var n = nhomMoi("Gửi anh chị em Khoa Dược");
-
-  var p1 = el("p", null, "Dạ, Phòng Công nghệ thông tin đang khảo sát thông tin để xây dựng hệ thống DPIA của Bệnh viện.");
-  n.appendChild(p1);
+  var n = nhomMoi();
 
   var hop = el("div","bao xanh");
-  hop.innerHTML = "<b>DPIA là gì?</b> Là hồ sơ liệt kê những việc trong Bệnh viện có đụng tới thông tin " +
-    "về con người — thu thập gì, cất ở đâu, ai xem được. Luật số 91/2025/QH15 quy định xây dựng dữ liệu này.";
-  hop.style.marginTop = ".9rem";
+  hop.innerHTML = "<b>DPIA là gì?</b> Hồ sơ liệt kê những việc trong Bệnh viện có đụng tới thông tin " +
+    "con người: thu thập gì, cất ở đâu, ai xem được. Luật 91/2025/QH15 quy định phải có.";
   n.appendChild(hop);
 
-  var p2 = el("p", null, "Anh/chị/em làm giúp giùm em bảng này để em tổng hợp và trình ký ạ. " +
-    "Phần lớn câu hỏi là bấm chọn có sẵn, anh chị em hoàn thành giúp em.");
+  var p2 = el("p", null, "Phòng CNTT đang khảo sát. Anh/chị/em làm giúp em bảng này để em tổng hợp và trình ký ạ.");
   p2.style.marginTop = ".9rem";
   n.appendChild(p2);
 
@@ -729,7 +724,7 @@ function manMo(m){
   n.appendChild(lt);
 
   var han = el("div","bao do");
-  han.innerHTML = "<b>Hạn chót: " + HAN_CHU + ".</b> Quá giờ này trang sẽ khoá, không nộp được nữa.";
+  han.innerHTML = "<b>Hạn chót: " + HAN_CHU + ".</b> Quá giờ này trang khoá, không nộp được nữa.";
   han.style.marginTop = ".9rem";
   n.appendChild(han);
 
@@ -740,15 +735,15 @@ function manMo(m){
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 5.5 19 12l-6.5 6.5"/></svg>';
   nut.onclick = function(){ di(1); };
   dh.appendChild(nut);
-  dh.appendChild(el("span","khoang","Khoảng 5–10 phút. Điền được trên điện thoại, nửa chừng thoát ra vẫn giữ nguyên."));
+  dh.appendChild(el("span","khoang","Khoảng 5–10 phút. Điền được trên điện thoại, thoát ra giữa chừng vẫn còn nguyên."));
   n.appendChild(dh);
   m.appendChild(n);
 
   var nl = nhomMoi("Lưu ý");
   var ds = el("div");
   [
-    ["do", "Chỉ mô tả <b>loại</b> thông tin", "Ví dụ ghi &ldquo;họ tên, số điện thoại người bệnh&rdquo;. Không ghi tên thật, số điện thoại thật, kết quả xét nghiệm hay hình ảnh của bất kỳ ai."],
-    ["xanh", "Không rõ thì chọn &ldquo;Không rõ&rdquo;", "Mục nào chưa chắc thì cứ chọn, đừng đoán. Đơn vị tư vấn sẽ hỏi lại sau."]
+    ["do", "Chỉ mô tả <b>loại</b> thông tin", "Ghi &ldquo;họ tên, số điện thoại người bệnh&rdquo;. Không ghi tên thật, số thật, kết quả xét nghiệm hay hình ảnh của ai."],
+    ["xanh", "Không rõ thì chọn &ldquo;Không rõ&rdquo;", "Chưa chắc thì cứ chọn, đừng đoán. Đơn vị tư vấn sẽ hỏi lại sau."]
   ].forEach(function(x){
     var b = el("div", "bao" + (x[0] ? " " + x[0] : ""));
     b.innerHTML = "<b>" + x[1] + ".</b> " + x[2];
