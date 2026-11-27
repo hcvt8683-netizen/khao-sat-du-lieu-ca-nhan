@@ -1114,12 +1114,12 @@ function goiDuLieu(){
   };
 }
 
-/* "Trịnh Há Dìu" -> "Dìu". Chưa nhập tên thì vẫn gọi chung cho lịch sự. */
+/* "Trịnh Há Dìu" -> "Há Dìu": gọi hai chữ cuối nghe trang trọng hơn gọi trống một chữ.
+   Tên chỉ có một chữ thì lấy một chữ; chưa nhập tên thì vẫn gọi chung cho lịch sự. */
 function tenGoi(){
   var t = (S.nguoi.hoTen || "").trim().replace(/\s+/g, " ");
   if(!t) return "anh/chị/em";
-  var phan = t.split(" ");
-  return phan[phan.length - 1];
+  return t.split(" ").slice(-2).join(" ");
 }
 
 function veNop(v){
