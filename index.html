@@ -33,6 +33,8 @@ img{max-width:100%}
   --ok:       #11674a;
   --ok-nen:   #e3f2ec;
   --bong:     0 1px 2px rgba(17,22,29,.06), 0 1px 3px rgba(17,22,29,.04);
+  --bong-cta:      0 4px 14px rgba(13,79,139,.26);
+  --bong-cta-manh: 0 8px 22px rgba(13,79,139,.34);
   color-scheme: light;
   --f-tieu: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
   --f-chu:  "Inter", "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
@@ -45,6 +47,7 @@ img{max-width:100%}
     --nhan:#e0a44a; --nhan-nen:#2d2415; --canh:#f08b7c; --canh-nen:#2e1a18;
     --ok:#5fc49a; --ok-nen:#14291f;
     --bong: 0 1px 2px rgba(0,0,0,.4);
+    --bong-cta: 0 4px 14px rgba(0,0,0,.55); --bong-cta-manh: 0 8px 22px rgba(0,0,0,.66);
     color-scheme: dark;
   }
 }
@@ -55,6 +58,7 @@ img{max-width:100%}
   --nhan:#e0a44a; --nhan-nen:#2d2415; --canh:#f08b7c; --canh-nen:#2e1a18;
   --ok:#5fc49a; --ok-nen:#14291f;
   --bong: 0 1px 2px rgba(0,0,0,.4);
+  --bong-cta: 0 4px 14px rgba(0,0,0,.55); --bong-cta-manh: 0 8px 22px rgba(0,0,0,.66);
   color-scheme: dark;
 }
 
@@ -189,6 +193,30 @@ textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
 .nut:disabled{opacity:.5}
 .nut.lon{font-size:1.02rem}
 
+/* ---- nút mời bắt đầu ở màn hình mở đầu ---- */
+.moi-di{margin-top:1.3rem;text-align:center}
+.nut.moi{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;
+  width:100%;max-width:23rem;min-height:56px;font-size:1.08rem;border-radius:14px;
+  letter-spacing:.01em;box-shadow:var(--bong-cta);
+  transition:transform .14s ease, box-shadow .14s ease, background .12s}
+.nut.moi:hover{transform:translateY(-2px);box-shadow:var(--bong-cta-manh)}
+.nut.moi:active{transform:translateY(0);box-shadow:var(--bong-cta)}
+.nut.moi svg{width:20px;height:20px;flex:0 0 20px;stroke:currentColor;stroke-width:2.4;
+  fill:none;stroke-linecap:round;stroke-linejoin:round;
+  animation:nhich 2.4s ease-in-out 1.4s infinite}
+.nut.moi:hover svg{animation:none;transform:translateX(5px);transition:transform .18s}
+@keyframes nhich{0%,72%,100%{transform:translateX(0)} 84%{transform:translateX(5px)}}
+.moi-di .khoang{display:block;margin-top:.7rem;font-size:.84rem;color:var(--chu-mo)}
+
+/* ---- màn hình đã khoá ---- */
+.da-khoa{text-align:center;padding:2rem 1rem 1.5rem}
+.da-khoa .vong{width:64px;height:64px;margin:0 auto 1.1rem;border-radius:50%;
+  background:var(--canh-nen);display:grid;place-items:center}
+.da-khoa .vong svg{width:30px;height:30px;stroke:var(--canh);stroke-width:2.4;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.da-khoa h2{color:var(--canh)}
+.da-khoa p{color:var(--chu-mo);margin-top:.6rem;font-size:.95rem;line-height:1.65}
+
 /* ---- thanh điều hướng dính đáy ---- */
 .dieuhuong{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem}
 .dieuhuong.chinh{position:sticky;bottom:0;z-index:15;margin:1.25rem -16px 0;
@@ -262,8 +290,11 @@ textarea.o{min-height:5.5rem;resize:vertical;line-height:1.55}
   stroke-linecap:round;stroke-linejoin:round}
 .xong-roi h2{color:var(--ok)}
 .xong-roi p{color:var(--chu-mo);margin-top:.5rem;font-size:.95rem;line-height:1.6}
-.loi-cam-on{font-family:var(--f-tieu);font-weight:600;font-size:1.05rem;color:var(--chu);
-  margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--vien)}
+.xong-roi .loi-cam-on{margin:1.35rem auto 0;max-width:27rem;padding:1.15rem 1.2rem;border-radius:14px;
+  background:var(--ok-nen);color:var(--ok);
+  font-family:var(--f-tieu);font-weight:600;font-size:1.14rem;line-height:1.65;
+  letter-spacing:.005em}
+@media (max-width:420px){ .xong-roi .loi-cam-on{font-size:1.05rem;padding:1rem} }
 
 .lienket{display:inline-flex;align-items:center;min-height:44px;background:none;border:none;
   color:var(--muc);font-size:.88rem;font-weight:500;text-align:left;
@@ -301,6 +332,12 @@ var daNop = false;
 /* Mã khoa gửi kèm tự động, người điền không phải gõ. Đây không phải mật khẩu
    — nó chỉ chặn máy dò tình cờ gửi rác vào bảng tổng hợp. */
 var MA_KHOA = "DUOC2026";
+
+/* Hết giờ này là khoá, không nhận phiếu nữa. Tháng trong JavaScript đếm từ 0,
+   nên 10 nghĩa là tháng 11. Giờ lấy theo đồng hồ máy người điền. */
+var HAN_NOP = new Date(2026, 10, 28, 16, 0, 0);
+var HAN_CHU = "16h00 ngày 28/11/2026";
+function hetHan(){ return new Date().getTime() >= HAN_NOP.getTime(); }
 
 /* ===================== DỮ LIỆU NỀN ===================== */
 
@@ -461,7 +498,7 @@ function tenBuoc(i){
   if(c.k === "mo")    return "Giới thiệu";
   if(c.k === "nguoi") return "Anh chị em là ai";
   if(c.k === "chon")  return "Chọn việc";
-  if(c.k === "xong")  return "Xem lại và nộp";
+  if(c.k === "xong")  return daNop ? "Đã nộp xong" : "Nộp phiếu";
   return "Việc " + (S.chon.indexOf(c.id) + 1) + " trong " + S.chon.length;
 }
 
@@ -692,15 +729,18 @@ function manMo(m){
   n.appendChild(lt);
 
   var han = el("div","bao do");
-  han.innerHTML = "<b>Hạn chót: 16h00 ngày 27/11/2026.</b>";
+  han.innerHTML = "<b>Hạn chót: " + HAN_CHU + ".</b> Quá giờ này trang sẽ khoá, không nộp được nữa.";
   han.style.marginTop = ".9rem";
   n.appendChild(han);
 
-  var dh = el("div","dieuhuong");
-  var nut = el("button","nut lon","Bắt đầu điền");
+  var dh = el("div","moi-di");
+  var nut = el("button","nut moi");
   nut.type = "button";
+  nut.innerHTML = '<span>Bắt đầu điền</span>' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 5.5 19 12l-6.5 6.5"/></svg>';
   nut.onclick = function(){ di(1); };
   dh.appendChild(nut);
+  dh.appendChild(el("span","khoang","Khoảng 5–10 phút. Điền được trên điện thoại, nửa chừng thoát ra vẫn giữ nguyên."));
   n.appendChild(dh);
   m.appendChild(n);
 
@@ -996,6 +1036,24 @@ function manPhieu(m, id, thuTu){
     cuoiCung ? nopTuTrangViec : null));
 }
 
+/* Quá hạn thì không cho điền, không cho nộp nữa */
+function manHetHan(m){
+  var n = nhomMoi();
+  var k = el("div","da-khoa");
+  var vong = el("div","vong");
+  vong.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    '<rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/>' +
+    '<path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
+  k.appendChild(vong);
+  k.appendChild(el("h2", null, "Đã hết hạn nộp phiếu"));
+  k.appendChild(el("p", null,
+    "Phiếu khảo sát đã đóng lúc " + HAN_CHU + " để kịp tổng hợp và trình ký."));
+  k.appendChild(el("p", null,
+    "Anh/chị/em cần bổ sung hay sửa lại thì liên hệ trực tiếp người tổng hợp của khoa ạ. Em cảm ơn anh/chị/em đã dành thời gian."));
+  n.appendChild(k);
+  m.appendChild(n);
+}
+
 function manXong(m){
   if(!daNop){
     var h = el("h1", null, "Gửi phiếu");
@@ -1054,8 +1112,6 @@ function veNop(v){
       vong.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12.5 9.5 18 20 6.5"/></svg>';
       xr.appendChild(vong);
       xr.appendChild(el("h2", null, "Đã nộp xong"));
-      xr.appendChild(el("p", null,
-        "Phiếu của anh/chị/em đã vào bảng tổng hợp của khoa. Phát hiện cần sửa thì cứ sửa rồi nộp lại — bản mới thay bản cũ, không bị trùng."));
       xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc anh/chị/em buổi chiều thân tâm an lạc."));
       v.appendChild(xr);
 
@@ -1136,6 +1192,8 @@ function veNop(v){
 /* Bấm Nộp ngay ở trang việc cuối, không qua bước xem lại */
 function nopTuTrangViec(nut, hang){
   var cuoi = cacBuoc().length - 1;
+  /* Trang mở từ trước hạn rồi để đó: tới lúc bấm vẫn phải chặn */
+  if(hetHan()){ ve(); window.scrollTo({top:0}); return; }
   if(!DIA_CHI_NOP){ di(cuoi); return; }
 
   nut.disabled = true;
@@ -1167,6 +1225,7 @@ function nopTuTrangViec(nut, hang){
 
 /* Gửi phiếu thẳng tới Google Apps Script */
 function nop(nut, vung){
+  if(hetHan()){ ve(); window.scrollTo({top:0}); return; }
   nut.disabled = true;
   nut.textContent = "Đang nộp...";
   var than = new URLSearchParams();
@@ -1539,6 +1598,17 @@ function ve(){
     document.getElementById("trangthai").textContent = "Trang gộp";
     manTongHop(m);
     chan(m);
+    return;
+  }
+  if(hetHan()){
+    var tk = document.getElementById("thanh");
+    if(tk) tk.style.width = "100%";
+    document.getElementById("trangthai").textContent = "Đã hết hạn";
+    manHetHan(m);
+    chan(m);
+    m.classList.remove("dang-hien");
+    void m.offsetWidth;
+    m.classList.add("dang-hien");
     return;
   }
   var b = cacBuoc();
