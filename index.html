@@ -103,6 +103,8 @@ a{color:var(--muc)}
 
 .cau{padding-block:1.1rem;border-top:1px solid var(--vien)}
 .nhom > header + .cau, .nhom > .cau:first-child{border-top:none;padding-top:0}
+.cau-phu{display:block;font-family:var(--f-tieu);font-weight:600;font-size:.94rem;
+  line-height:1.5;margin-bottom:.45rem}
 .cau-tieu{display:block;font-family:var(--f-tieu);font-weight:600;font-size:1.02rem;
   line-height:1.4;margin-bottom:.2rem}
 .vidu{font-size:.88rem;color:var(--chu-mo);margin-bottom:.7rem;line-height:1.55}
@@ -522,10 +524,10 @@ function phieuMoi(viec){
     treEm:"",
     truong: [],
     nguon: [],
-    dongY:"", bieuMau:"",
+    dongY:"", bieuMau:"", nhayCamBM:"",
     noiLuu: [],
     aiXem: [], soNguoi:"",
-    trongBV: [], ngoaiBV:"", nuocNgoai:"",
+    trongBV: [], ngoaiBV:"", hopDong:"", nuocNgoai:"",
     luuLau:"", luuGhi:"",
     baoVe: [],
     ghiChu:""
@@ -641,7 +643,7 @@ function oChipsNhom(nhom, daChon, doi, lopNS){
   return w;
 }
 
-function oRadio(ds, giaTri, dat){
+function oRadio(ds, giaTri, dat, sauKhiChon){
   var w = el("div","radio");
   ds.forEach(function(m){
     var b = el("button", null, m);
@@ -649,6 +651,7 @@ function oRadio(ds, giaTri, dat){
     b.setAttribute("aria-pressed", giaTri() === m ? "true" : "false");
     b.onclick = function(){
       dat(m); luu();
+      if(sauKhiChon) sauKhiChon();
       Array.prototype.forEach.call(w.children, function(x){
         x.setAttribute("aria-pressed", x.textContent === m ? "true" : "false");
       });
@@ -977,8 +980,20 @@ function manPhieu(m, id, thuTu){
 
   var c4 = cauMoi("Ngoài Bệnh viện có ai nhận không",
     "Ví dụ: <b>Bảo hiểm xã hội</b>, <b>Sở Y tế</b>, <b>Trung tâm DI &amp; ADR Quốc gia</b>, <b>công ty cung cấp phần mềm</b>, <b>nhà thầu</b>.");
-  c4.appendChild(oChu(function(){return p.ngoaiBV}, function(v){p.ngoaiBV=v}, "Ghi tên tổ chức, hoặc ghi: Không", true));
+  var khoiHD = el("div");
+  khoiHD.style.marginTop = ".65rem";
+  khoiHD.appendChild(el("div","cau-phu","Tổ chức đó có hợp đồng hay văn bản cam kết bảo vệ dữ liệu không?"));
+  khoiHD.appendChild(oRadio(["Có","Không","Không rõ"], function(){return p.hopDong}, function(v){p.hopDong=v}));
+  /* Chỉ hỏi khi thật sự có tổ chức bên ngoài, để người không liên quan khỏi phải đọc thêm */
+  function hienHD(){
+    var t = (p.ngoaiBV || "").trim().toLowerCase();
+    var co = t && t !== "không" && t !== "khong" && t !== "không rõ" && t !== "không có";
+    khoiHD.style.display = co ? "" : "none";
+  }
+  c4.appendChild(oChu(function(){return p.ngoaiBV}, function(v){p.ngoaiBV=v; hienHD();}, "Ghi tên tổ chức, hoặc ghi: Không", true));
   c4.appendChild(nutKhongRo(function(){ p.ngoaiBV="Không rõ"; }, ve));
+  c4.appendChild(khoiHD);
+  hienHD();
   C.appendChild(c4);
 
   var c5 = cauMoi("Có gửi ra nước ngoài không",
@@ -987,12 +1002,20 @@ function manPhieu(m, id, thuTu){
   C.appendChild(c5);
 
   var c6 = cauMoi("Có hỏi ý kiến người ta trước khi thu thập không");
+  var khoiNC = el("div");
+  khoiNC.style.marginTop = ".65rem";
+  khoiNC.appendChild(el("div","cau-phu","Biểu mẫu đó có nói rõ đây là thông tin nhạy cảm không?"));
+  khoiNC.appendChild(oRadio(["Có","Không","Không rõ"], function(){return p.nhayCamBM}, function(v){p.nhayCamBM=v}));
+  /* Khoản 4 Điều 6 Nghị định 356/2025: biểu mẫu xin đồng ý phải nói rõ là dữ liệu nhạy cảm */
+  function hienNC(){ khoiNC.style.display = (p.dongY === "Có, ký vào biểu mẫu") ? "" : "none"; }
   c6.appendChild(oRadio(["Có, ký vào biểu mẫu","Không, làm theo quy định pháp luật","Không rõ"],
-    function(){return p.dongY}, function(v){p.dongY=v}));
+    function(){return p.dongY}, function(v){p.dongY=v}, hienNC));
   var cbm = el("div");
   cbm.style.marginTop = ".5rem";
   cbm.appendChild(oChu(function(){return p.bieuMau}, function(v){p.bieuMau=v}, "Nếu có biểu mẫu, ghi tên biểu mẫu và nơi lưu phiếu đã ký"));
   c6.appendChild(cbm);
+  c6.appendChild(khoiNC);
+  hienNC();
   c6.appendChild(giaiThich("Bệnh viện phải chứng minh được căn cứ xử lý dữ liệu. Nhiều việc trong bệnh viện không cần xin đồng ý vì pháp luật đã quy định phải làm — anh/chị/em không phải tự kết luận, chỉ cần ghi thực tế đang làm thế nào."));
   C.appendChild(c6);
   m.appendChild(C);
