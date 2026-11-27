@@ -1114,6 +1114,14 @@ function goiDuLieu(){
   };
 }
 
+/* "Trịnh Há Dìu" -> "Dìu". Chưa nhập tên thì vẫn gọi chung cho lịch sự. */
+function tenGoi(){
+  var t = (S.nguoi.hoTen || "").trim().replace(/\s+/g, " ");
+  if(!t) return "anh/chị/em";
+  var phan = t.split(" ");
+  return phan[phan.length - 1];
+}
+
 function veNop(v){
   v.innerHTML = "";
 
@@ -1125,7 +1133,7 @@ function veNop(v){
       vong.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12.5 9.5 18 20 6.5"/></svg>';
       xr.appendChild(vong);
       xr.appendChild(el("h2", null, "Đã nộp xong"));
-      xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc anh/chị/em buổi chiều thân tâm an lạc."));
+      xr.appendChild(el("p","loi-cam-on","Em cảm ơn, chúc " + tenGoi() + " buổi chiều thân tâm an lạc."));
       v.appendChild(xr);
 
       var hl = el("div","dieuhuong");
